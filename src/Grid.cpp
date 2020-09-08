@@ -1,7 +1,7 @@
 #include "Grid.h"
 
 Grid::Grid() : m_enable_grid(true), m_canvas_size(100.0f, 100.0f), m_min_canvas_position(0.0f, 0.0f), m_max_canvas_position(100.0f, 100.0f), m_grid_steps(10.0f),
-m_grid_square_colour_off(255.0f, 255.0f, 255.0f, 255.0f), m_grid_square_colour_on(25.0f, 25.0f, 25.0f, 255.0f) {};
+m_grid_square_colour_off(IM_COL32(255.0f, 255.0f, 255.0f, 255.0f)), m_grid_square_colour_on(IM_COL32(25.0f, 25.0f, 25.0f, 255.0f)) {};
 
 bool Grid::enable_grid(std::unique_ptr<bool> grid_flag)
 {
@@ -78,18 +78,33 @@ void Grid::draw_grid()
 }
 
 // Incomplete.
-// Implement the drawing of subsequent rectangles recursively. 
+// Also the squares are currently overwriting the border rectangle. Try to change this.
+// Now make it so that you can click and a cell will be filled. This is where the invisible button comes in.
+// Also make it so that you can change the colour of the filled rect.
+
+// Manually add cells.
 void Grid::draw_cells(std::vector<ImVec2>& cells_to_draw)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
-	draw_list->PushClipRect(m_min_canvas_position, m_max_canvas_position, true);
+	draw_list->PushClipRect(m_min_canvas_position, m_max_canvas_position, false);
 
-	draw_list->AddRectFilled(m_min_canvas_position, ImVec2(m_min_canvas_position.x + 10.0, m_min_canvas_position.y + 10.0),
-		IM_COL32(100, 200, 100, 255));
+	for (auto cell : cells_to_draw)
+	{
+		ImVec2 cell_pos_i = ImVec2(m_min_canvas_position.x + (cell.x * m_grid_steps), m_min_canvas_position.y + (cell.y * m_grid_steps));
+		ImVec2 cell_pos_f = ImVec2(cell_pos_i.x + m_grid_steps, cell_pos_i.y + m_grid_steps);
+		draw_list->AddRectFilled(cell_pos_i, cell_pos_f, m_grid_square_colour_off);
+	
+	}
 
 	draw_list->PopClipRect();
+}
+
+// Add cells by clicking.
+void Grid::draw_cells()
+{
+
 }
 
 Grid::~Grid()

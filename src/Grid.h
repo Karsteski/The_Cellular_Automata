@@ -21,7 +21,7 @@ public:
 
 	void draw_grid();
 	virtual void draw_cells(std::vector<ImVec2>&);
-
+	virtual void draw_cells();
 	virtual ~Grid();
 
 private:
@@ -33,7 +33,7 @@ private:
 	
 	float m_grid_steps;
 
-	ImVec4 m_grid_square_colour_off;
-	ImVec4 m_grid_square_colour_on;
+	ImU32 m_grid_square_colour_off;
+	ImU32 m_grid_square_colour_on;
 
 };

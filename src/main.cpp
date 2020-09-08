@@ -123,9 +123,10 @@ int main(int, char**)
 			ImGui::Begin("Test Canvas");
 
 			Grid test_grid;
+			test_grid.set_grid_steps(20);
 			test_grid.draw_grid();
-
-			std::vector<ImVec2> test_vec = { ImVec2(15,15) };
+			
+			std::vector<ImVec2> test_vec = { ImVec2(0,3), ImVec2(4,5), ImVec2(6,5), ImVec2(0,0), ImVec2(2,2) };
 			test_grid.draw_cells(test_vec);
 
 			ImGui::End();
