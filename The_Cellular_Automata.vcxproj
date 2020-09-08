@@ -151,6 +151,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Grid.cpp" />
+    <ClCompile Include="src\application.cpp" />
     <ClCompile Include="src\imgui\GL\gl3w.c" />
     <ClCompile Include="src\imgui\imgui.cpp" />
     <ClCompile Include="src\imgui\imgui_demo.cpp" />
@@ -162,6 +164,8 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Grid.h" />
+    <ClInclude Include="src\application.h" />
     <ClInclude Include="src\imgui\GLFW\glfw3.h" />
     <ClInclude Include="src\imgui\GLFW\glfw3native.h" />
     <ClInclude Include="src\imgui\GL\gl3w.h" />

@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{8420f2b0-e813-46e7-a49f-7fb7ebb96f1a}</ProjectGuid>
-    <RootNamespace>Catch2TestProject</RootNamespace>
+    <ProjectGuid>{b5b6cd59-aa2a-4df1-b96c-5d73c245fc08}</ProjectGuid>
+    <RootNamespace>Catch2UnitTests</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -72,19 +72,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <ExecutablePath>$(SolutionDir)Catch2_Test_Project\catch2\;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(SolutionDir)Catch2_Unit_Tests\catch2\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <ExecutablePath>$(SolutionDir)Catch2_Test_Project\catch2\;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(SolutionDir)Catch2_Unit_Tests\catch2\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <ExecutablePath>$(SolutionDir)Catch2_Test_Project\catch2\;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(SolutionDir)Catch2_Unit_Tests\catch2\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <ExecutablePath>$(SolutionDir)Catch2_Test_Project\catch2\;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(SolutionDir)Catch2_Unit_Tests\catch2\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -143,14 +143,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="tests\tests.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="catch2\catch.hpp" />
     <ClInclude Include="catch2\catch_reporter_automake.hpp" />
     <ClInclude Include="catch2\catch_reporter_sonarqube.hpp" />
     <ClInclude Include="catch2\catch_reporter_tap.hpp" />
     <ClInclude Include="catch2\catch_reporter_teamcity.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="tests\tests.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

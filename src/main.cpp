@@ -1,4 +1,10 @@
 
+#include <memory>
+
+// Application 
+#include "application.h"
+#include "Grid.h"
+
 // (GLFW is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan/Metal graphics context creation, etc.)
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -110,7 +116,20 @@ int main(int, char**)
 		// Feed inputs to imgui, starts a new frame
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
+		ImGui::NewFrame(); 
+
+		{
+
+			ImGui::Begin("Test Canvas");
+
+			Grid test_grid;
+			test_grid.draw_grid();
+
+			std::vector<ImVec2> test_vec = { ImVec2(15,15) };
+			test_grid.draw_cells(test_vec);
+
+			ImGui::End();
+		}
 
 		{
 			static bool show_demo_window = true;
