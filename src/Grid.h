@@ -10,18 +10,18 @@ public:
 	
 	Grid();
 
-	bool enable_grid(std::unique_ptr<bool>);
+	bool* enable_grid();
 	
 	ImVec2 get_min_canvas_position() const;
 	ImVec2 get_max_canvas_position() const;
 	ImVec2 get_canvas_size() const;
 
 	float get_grid_steps() const;
-	bool set_grid_steps(float);
+	void set_grid_steps(float);
 
 	void draw_grid();
-	virtual void draw_cells(std::vector<ImVec2>&);
-	virtual void draw_cells();
+	virtual void draw_cells(std::vector<ImVec2>) const;
+
 	virtual ~Grid();
 
 private:

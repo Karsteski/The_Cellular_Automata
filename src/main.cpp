@@ -55,7 +55,7 @@ int main(int, char**)
 #endif
 
 	// Create window with graphics context
-	GLFWwindow* window = glfwCreateWindow(1400, 450, "HPLC Assay Calculator", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(1280, 720, "The Cellular Automata", NULL, NULL);
 	if (window == NULL)
 		return 1;
 	glfwMakeContextCurrent(window);
@@ -118,22 +118,83 @@ int main(int, char**)
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame(); 
 
+		// Settings to get the ImGui window to adapt to the OS window size.
+		ImGui::SetNextWindowPos(ImVec2(0, 0));
+		ImGui::SetNextWindowSize(io.DisplaySize);
+		ImGui::Begin("The Cellular Automata", 0, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse |
+		ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+		// Application Flags
+		static bool show_demo_window = false;
+
 		{
+			{
+				ImGui::BeginMenuBar();
 
-			ImGui::Begin("Test Canvas");
+				//Far more menu items to add.
+				if(ImGui::BeginMenu("Menu"))
+				{
+					ImGui::MenuItem("Show ImGui Demo Window", NULL, &show_demo_window);
+					ImGui::EndMenu();
+				}
+				ImGui::EndMenuBar();
+			}
 
-			Grid test_grid;
-			test_grid.set_grid_steps(20);
-			test_grid.draw_grid();
-			
-			std::vector<ImVec2> test_vec = { ImVec2(0,3), ImVec2(4,5), ImVec2(6,5), ImVec2(0,0), ImVec2(2,2) };
-			test_grid.draw_cells(test_vec);
+			ImGui::BeginTabBar("Main Tab");
+			if (ImGui::BeginTabItem("Basic Drawing Grid"))
+			{
+				// need colour picker for square.
 
+				static Grid basic_grid;
+
+				ImGui::Checkbox("Enable Grid", basic_grid.enable_grid());
+				static int grid_steps = 10;
+				ImGui::SetNextItemWidth(100);
+				ImGui::SliderInt("Grid Step Size", &grid_steps, 1, 100);
+				basic_grid.set_grid_steps(grid_steps);
+
+				static int basic_rect_x = 0;
+				static int basic_rect_y = 0;
+
+				ImGui::SetNextItemWidth(100);
+				ImGui::InputInt("x-coordinate", &basic_rect_x);
+				ImGui::SameLine(); ImGui::SetNextItemWidth(100);
+				ImGui::InputInt("y-coordinate", &basic_rect_y);
+
+				basic_grid.draw_grid();
+
+				std::vector<ImVec2> basic_vec = { ImVec2(basic_rect_x, basic_rect_y) };
+				basic_grid.draw_cells(basic_vec);
+
+				ImGui::EndTabItem();
+			}
+
+			if (ImGui::BeginTabItem("1D Cellular Automata"))
+			{
+				// WIP
+
+				ImGui::EndTabItem();
+			}
+
+			if (ImGui::BeginTabItem("2D Cellular Automata"))
+			{
+				// WIP
+
+				ImGui::EndTabItem();
+			}
+
+			if (ImGui::BeginTabItem("Conway's Game of Life"))
+			{
+				// WIP
+
+				ImGui::EndTabItem();
+			}
+
+			ImGui::EndTabBar();
 			ImGui::End();
 		}
 
 		{
-			static bool show_demo_window = true;
 			if (show_demo_window)
 				ImGui::ShowDemoWindow(&show_demo_window);
 		}

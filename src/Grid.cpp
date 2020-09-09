@@ -1,12 +1,15 @@
 #include "Grid.h"
+#include <utility>
+#include <cmath>
 
 Grid::Grid() : m_enable_grid(true), m_canvas_size(100.0f, 100.0f), m_min_canvas_position(0.0f, 0.0f), m_max_canvas_position(100.0f, 100.0f), m_grid_steps(10.0f),
 m_grid_square_colour_off(IM_COL32(255.0f, 255.0f, 255.0f, 255.0f)), m_grid_square_colour_on(IM_COL32(25.0f, 25.0f, 25.0f, 255.0f)) {};
 
-bool Grid::enable_grid(std::unique_ptr<bool> grid_flag)
+
+// Probably want to convert this to a smart pointer...
+bool* Grid::enable_grid()
 {
-	m_enable_grid = &grid_flag;
-	return m_enable_grid;
+	return &m_enable_grid;
 }
 
 ImVec2 Grid::get_min_canvas_position() const
@@ -29,18 +32,13 @@ float Grid::get_grid_steps() const
 	return m_grid_steps;
 }
 
-bool Grid::set_grid_steps(float grid_steps)
+// Only use positive integers or the negative sign will be dropped, as well as any decimals.
+void Grid::set_grid_steps(float grid_steps)
 {
-	if (grid_steps > 0)
-	{
-		m_grid_steps = grid_steps;
-		return true;
-	}
+	grid_steps = std::abs(grid_steps);
+	grid_steps = std::trunc(grid_steps);
 
-	else
-	{
-		return false;
-	}
+	m_grid_steps = grid_steps;
 }
 
 void Grid::draw_grid()
@@ -65,46 +63,47 @@ void Grid::draw_grid()
 	const bool is_button_hovered = ImGui::IsItemHovered();
 	const bool is_button_clicked = ImGui::IsItemActive();
 
-	// Draw grid lines
-	for (float x = m_grid_steps; x < m_canvas_size.x; x += m_grid_steps)
+	if (m_enable_grid)
 	{
-		draw_list->AddLine(ImVec2(m_min_canvas_position.x + x, m_min_canvas_position.y), ImVec2(m_min_canvas_position.x + x, m_max_canvas_position.y), IM_COL32(200, 200, 200, 40));
+		// Draw grid lines
+		for (float x = m_grid_steps; x < m_canvas_size.x; x += m_grid_steps)
+		{
+			draw_list->AddLine(ImVec2(m_min_canvas_position.x + x, m_min_canvas_position.y), ImVec2(m_min_canvas_position.x + x, m_max_canvas_position.y), IM_COL32(200, 200, 200, 40));
+		}
+
+		for (float y = m_grid_steps; y < m_canvas_size.y; y += m_grid_steps)
+		{
+			draw_list->AddLine(ImVec2(m_min_canvas_position.x, m_min_canvas_position.y + y), ImVec2(m_max_canvas_position.x, m_min_canvas_position.y + y), IM_COL32(200, 200, 200, 40));
+		}
 	}
 
-	for (float y = m_grid_steps; y < m_canvas_size.y; y += m_grid_steps)
-	{
-		draw_list->AddLine(ImVec2(m_min_canvas_position.x, m_min_canvas_position.y + y), ImVec2(m_max_canvas_position.x, m_min_canvas_position.y + y), IM_COL32(200, 200, 200, 40));
-	}
 }
 
-// Incomplete.
-// Also the squares are currently overwriting the border rectangle. Try to change this.
-// Now make it so that you can click and a cell will be filled. This is where the invisible button comes in.
-// Also make it so that you can change the colour of the filled rect.
-
-// Manually add cells.
-void Grid::draw_cells(std::vector<ImVec2>& cells_to_draw)
+// Only use positive integers or the negative sign will be dropped, as well as any decimals.
+void Grid::draw_cells(std::vector<ImVec2> cells_to_draw) const
 {
 	ImGuiIO& io = ImGui::GetIO();
 	ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
-	draw_list->PushClipRect(m_min_canvas_position, m_max_canvas_position, false);
-
 	for (auto cell : cells_to_draw)
 	{
+		// To remove negative numbers, which don't show up on the grid.
+		if (cell.x < 0 or cell.y < 0)
+		{
+			cell.x = std::abs(cell.x);
+			cell.y = std::abs(cell.y);
+		}
+
+		// To remove decimals.
+		{
+			cell.x = std::trunc(cell.x);
+			cell.y = std::trunc(cell.y);
+		}
+
 		ImVec2 cell_pos_i = ImVec2(m_min_canvas_position.x + (cell.x * m_grid_steps), m_min_canvas_position.y + (cell.y * m_grid_steps));
 		ImVec2 cell_pos_f = ImVec2(cell_pos_i.x + m_grid_steps, cell_pos_i.y + m_grid_steps);
-		draw_list->AddRectFilled(cell_pos_i, cell_pos_f, m_grid_square_colour_off);
-	
+		draw_list->AddRectFilled(cell_pos_i, cell_pos_f, IM_COL32(200,100,200,255));
 	}
-
-	draw_list->PopClipRect();
-}
-
-// Add cells by clicking.
-void Grid::draw_cells()
-{
-
 }
 
 Grid::~Grid()
