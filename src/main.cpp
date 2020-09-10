@@ -1,9 +1,11 @@
 
+#include <iostream>
 #include <vector>
 
 // Application 
-#include "application.h"
+#include "Application.h"
 #include "Grid.h"
+#include "Elementary.h"
 
 // (GLFW is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan/Metal graphics context creation, etc.)
 #include "imgui.h"
@@ -97,6 +99,9 @@ int main(int, char**)
 	// Window state
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+	static Elementary testGrid;
+	testGrid.GenerateCells();
+
 	while (!glfwWindowShouldClose(window))
 	{
 		// Poll and handle events (inputs, window resize, etc.)
@@ -175,13 +180,14 @@ int main(int, char**)
 				ImGui::EndTabItem();
 			}
 
+			
 			if (ImGui::BeginTabItem("1D Cellular Automata"))
 			{
-				// WIP
+				
 
 				ImGui::EndTabItem();
 			}
-
+			
 			if (ImGui::BeginTabItem("2D Cellular Automata"))
 			{
 				// WIP
