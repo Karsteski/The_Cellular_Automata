@@ -100,7 +100,7 @@ int main(int, char**)
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 	static Elementary testGrid;
-	testGrid.GenerateCells();
+	testGrid.SetAllCellStates();
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -183,7 +183,9 @@ int main(int, char**)
 			
 			if (ImGui::BeginTabItem("1D Cellular Automata"))
 			{
-				
+				testGrid.draw_grid();
+				testGrid.draw_cells();
+
 
 				ImGui::EndTabItem();
 			}

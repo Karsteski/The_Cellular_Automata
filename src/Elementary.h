@@ -21,25 +21,27 @@ namespace std
 	};
 }
 
+enum cellState : bool { inactive = false, active = true };
+
 class Elementary : public Grid
 {
 
 public:
 
-	enum cellState : bool { inactive = false, active = true };
+	
 
 	Elementary();
 	
 	std::map<ImVec2, cellState>& GetCellMap();
 	unsigned int GetNumberOfGenerations();
 
-	void GetNeighbourCells();
-	bool GetCellState();
-	void GenerateCells();
+	cellState GetCellState(ImVec2);
+	void GenerateCells(cellState);
 	
+	void SetSingleCellState(ImVec2, cellState);
 	void SetNumberOfGenerations(unsigned int);
 	
-	void SetAllCellStates(std::map<ImVec2, cellState>&);
+	void SetAllCellStates();
 
 	virtual void draw_cells() const;
 
