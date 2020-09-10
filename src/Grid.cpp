@@ -3,7 +3,9 @@
 #include <cmath>
 
 Grid::Grid() : m_enable_grid(true), m_canvas_size(100.0f, 100.0f), m_min_canvas_position(0.0f, 0.0f), m_max_canvas_position(100.0f, 100.0f), m_grid_steps(10.0f),
-m_grid_square_colour_off(IM_COL32(255.0f, 255.0f, 255.0f, 255.0f)), m_grid_square_colour_on(IM_COL32(25.0f, 25.0f, 25.0f, 255.0f)) {};
+m_cell_colour_main(IM_COL32(100.0f, 100.0f, 100.0f, 255.0f)),
+m_cell_colour_off(IM_COL32(255.0f, 255.0f, 255.0f, 255.0f)),
+m_cell_colour_on(IM_COL32(25.0f, 25.0f, 25.0f, 255.0f)) {};
 
 
 // Probably want to convert this to a smart pointer...
@@ -27,6 +29,11 @@ ImVec2 Grid::get_canvas_size() const
 	return m_canvas_size;
 }
 
+ImColor Grid::get_cell_colour_main()
+{
+	return m_cell_colour_main;
+}
+
 float Grid::get_grid_steps() const
 {
 	return m_grid_steps;
@@ -39,6 +46,11 @@ void Grid::set_grid_steps(float grid_steps)
 	grid_steps = std::trunc(grid_steps);
 
 	m_grid_steps = grid_steps;
+}
+
+void Grid::set_cell_colour_main(ImColor colour)
+{
+	m_cell_colour_main = colour;
 }
 
 void Grid::draw_grid()
@@ -102,7 +114,7 @@ void Grid::draw_cells(std::vector<ImVec2> cells_to_draw) const
 
 		ImVec2 cell_pos_i = ImVec2(m_min_canvas_position.x + (cell.x * m_grid_steps), m_min_canvas_position.y + (cell.y * m_grid_steps));
 		ImVec2 cell_pos_f = ImVec2(cell_pos_i.x + m_grid_steps, cell_pos_i.y + m_grid_steps);
-		draw_list->AddRectFilled(cell_pos_i, cell_pos_f, IM_COL32(200,100,200,255));
+		draw_list->AddRectFilled(cell_pos_i, cell_pos_f, m_cell_colour_main);
 	}
 }
 

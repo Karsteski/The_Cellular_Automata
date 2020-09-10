@@ -16,8 +16,12 @@ public:
 	ImVec2 get_max_canvas_position() const;
 	ImVec2 get_canvas_size() const;
 
+	ImColor get_cell_colour_main();
+
 	float get_grid_steps() const;
 	void set_grid_steps(float);
+
+	void set_cell_colour_main(ImColor);
 
 	void draw_grid();
 	virtual void draw_cells(std::vector<ImVec2>) const;
@@ -33,7 +37,8 @@ private:
 	
 	float m_grid_steps;
 
-	ImU32 m_grid_square_colour_off;
-	ImU32 m_grid_square_colour_on;
+	ImColor m_cell_colour_main;
+	ImColor m_cell_colour_off;
+	ImColor m_cell_colour_on;
 
 };

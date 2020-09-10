@@ -1,5 +1,5 @@
 
-#include <memory>
+#include <vector>
 
 // Application 
 #include "application.h"
@@ -17,13 +17,6 @@
 
 // Always include glfw3.h after OpenGL
 #include <GLFW/glfw3.h>
-
-// [Win32] This library includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
-// To link with VS2010-era libraries, VS2015+ requires linking with legacy_stdio_definitions.lib, which is done using this pragma.
-// Update the library when I get a chance!
-#if defined(_MSC_VER) && (_MSC_VER >= 1900) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
-#pragma comment(lib, "legacy_stdio_definitions")
-#endif
 
 static void glfw_error_callback(int error, const char* description)
 {
@@ -143,15 +136,13 @@ int main(int, char**)
 			ImGui::BeginTabBar("Main Tab");
 			if (ImGui::BeginTabItem("Basic Drawing Grid"))
 			{
-				// need colour picker for square.
-
 				static Grid basic_grid;
 
 				ImGui::Checkbox("Enable Grid", basic_grid.enable_grid());
 				static int grid_steps = 10;
 				ImGui::SetNextItemWidth(100);
 				ImGui::SliderInt("Grid Step Size", &grid_steps, 1, 100);
-				basic_grid.set_grid_steps(grid_steps);
+				basic_grid.set_grid_steps(static_cast<float>(grid_steps));
 
 				static int basic_rect_x = 0;
 				static int basic_rect_y = 0;
@@ -161,11 +152,26 @@ int main(int, char**)
 				ImGui::SameLine(); ImGui::SetNextItemWidth(100);
 				ImGui::InputInt("y-coordinate", &basic_rect_y);
 
-				basic_grid.draw_grid();
+				ImGui::SetNextItemWidth(300);
+				static ImVec4 colour_picker = { 0.0f, 0.0f, 0.0f, 0.33f };
+				ImGui::ColorEdit4("Cell Colour", &colour_picker.x);
+				basic_grid.set_cell_colour_main((ImColor)colour_picker);
 
-				std::vector<ImVec2> basic_vec = { ImVec2(basic_rect_x, basic_rect_y) };
-				basic_grid.draw_cells(basic_vec);
+				ImGui::Separator();
+				
+				{
+					ImGui::BeginTabBar("Grid Tab");
+					ImGui::BeginTabItem("Grid");
+					if (basic_rect_x < 0) basic_rect_x = 0;
+					if (basic_rect_y < 0) basic_rect_y = 0;
 
+					basic_grid.draw_grid();
+
+					std::vector<ImVec2> basic_vec = { ImVec2(static_cast<float>(basic_rect_x), static_cast<float>(basic_rect_y)) };
+					basic_grid.draw_cells(basic_vec);
+					ImGui::EndTabItem();
+					ImGui::EndTabBar();
+				}
 				ImGui::EndTabItem();
 			}
 
