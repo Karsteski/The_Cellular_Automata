@@ -13,10 +13,10 @@ namespace std
 	{
 		bool operator() (const ImVec2& lhs, const ImVec2& rhs) const
 		{
-			if (lhs.x == rhs.x)
-				return (lhs.y < rhs.y);
-			else
+			if (lhs.y == rhs.y)
 				return (lhs.x < rhs.x);
+			else
+				return (lhs.y < rhs.y);
 		}
 	};
 }
@@ -41,12 +41,10 @@ public:
 	void SetSingleCellState(ImVec2, cellState);
 	void SetNumberOfGenerations(unsigned int);
 	
-	void SetAllCellStates();
+	void SetAllCellStates(std::bitset<8>);
 
 	virtual void draw_cells() const;
 
-	
-	
 	void SetRandomRuleset();
 
 	virtual ~Elementary();

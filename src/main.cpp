@@ -100,7 +100,11 @@ int main(int, char**)
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 	
 	static Elementary testGrid;
-	testGrid.SetAllCellStates();
+	
+	//Default ruleset is Rule 90 (https://mathworld.wolfram.com/ElementaryCellularAutomaton.html)
+	std::bitset<8> defaultRuleset("01011010");
+	testGrid.SetAllCellStates(defaultRuleset);
+
 
 	while (!glfwWindowShouldClose(window))
 	{
