@@ -3,7 +3,7 @@
 #include <iostream>
 #include <algorithm>
 
-Elementary::Elementary() : m_cellMap(), m_ruleset("00000000"), m_numberOfCellsPerGeneration(32), m_numberOfGenerations(100) { };
+Elementary::Elementary() : m_cellMap(), m_ruleset("00000000"), m_numberOfCellsPerGeneration(8), m_numberOfGenerations(8) { };
 
 std::map<ImVec2, cellState>& Elementary::GetCellMap()
 {
@@ -46,13 +46,13 @@ void Elementary::SetAllCellStates()
 
 	for (auto& cell : m_cellMap)
 	{
-		
-		if (cell.first.x < 1 or cell.first.y < 1)
+		/*
+		if (cell.first.x == 0 or cell.first.y == 0)
 		{
 			//do nothing
 		}
-		
-		else
+		*/
+		//else
 		{
 			std::bitset<3> previousCells("000");
 			
@@ -63,17 +63,30 @@ void Elementary::SetAllCellStates()
 
 			if (m_cellMap.find(prev_cell_0) != m_cellMap.end())
 			{
-				const auto& check_0 = m_cellMap.find(prev_cell_0);
-				const auto& value_0 = *check_0;
-				const auto& final_0 = m_cellMap.at(value_0.first);
+				cellState final_0 = inactive;
+				cellState final_1 = inactive;
+				cellState final_2 = inactive;
 
-				const auto& check_1 = m_cellMap.find(prev_cell_1);
-				const auto& value_1 = *check_1;
-				const auto& final_1 = m_cellMap.at(value_1.first);
+				if (m_cellMap.find(prev_cell_0) != m_cellMap.end())
+				{
+					const auto& check_0 = m_cellMap.find(prev_cell_0);
+					const auto& value_0 = *check_0;
+					final_0 = m_cellMap.at(value_0.first);
+				}
 
-				const auto& check_2 = m_cellMap.find(prev_cell_2);
-				const auto& value_2 = *check_2;
-				const auto& final_2 = m_cellMap.at(value_2.first);
+				if (m_cellMap.find(prev_cell_1) != m_cellMap.end())
+				{
+					const auto& check_1 = m_cellMap.find(prev_cell_1);
+					const auto& value_1 = *check_1;
+					final_1 = m_cellMap.at(value_1.first);
+				}
+
+				if (m_cellMap.find(prev_cell_2) != m_cellMap.end())
+				{
+					const auto& check_2 = m_cellMap.find(prev_cell_2);
+					const auto& value_2 = *check_2;
+					final_2 = m_cellMap.at(value_2.first);
+				}
 
 				if (final_0 == active) previousCells[0].flip();
 				if (final_1 == active) previousCells[1].flip();
@@ -81,9 +94,9 @@ void Elementary::SetAllCellStates()
 
 				auto neighbourCellsState = previousCells.to_string();
 				//std::cout << "State" << " - " << neighbourCellsState << std::endl;
-				std::reverse(neighbourCellsState.begin(), neighbourCellsState.end());
+				//std::reverse(neighbourCellsState.begin(), neighbourCellsState.end());
 
-				//Elementary Cellular Automata Rules (Rule 110)
+				//Elementary Cellular Automata Rules (Rule 90)
 				std::string rulePosition_0 = "111";
 				std::string rulePosition_1 = "110";
 				std::string rulePosition_2 = "101";
