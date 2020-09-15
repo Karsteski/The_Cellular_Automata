@@ -98,7 +98,7 @@ int main(int, char**)
 
 	// Window state
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
+	
 	static Elementary testGrid;
 	testGrid.SetAllCellStates();
 
