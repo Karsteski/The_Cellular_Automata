@@ -102,9 +102,6 @@ int main(int, char**)
 	static Elementary testGrid;
 	
 	//Default ruleset is Rule 90 (https://mathworld.wolfram.com/ElementaryCellularAutomaton.html)
-	std::bitset<8> defaultRuleset("01011010");
-	testGrid.SetAllCellStates(defaultRuleset);
-
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -187,23 +184,63 @@ int main(int, char**)
 			
 			if (ImGui::BeginTabItem("1D Cellular Automata"))
 			{
+				static std::bitset<8> ElementaryCellularAutomataRuleset("01011010");
+
+				static bool rulesetPosition_0 = ElementaryCellularAutomataRuleset[0];
+				static bool rulesetPosition_1 = ElementaryCellularAutomataRuleset[1];
+				static bool rulesetPosition_2 = ElementaryCellularAutomataRuleset[2];
+				static bool rulesetPosition_3 = ElementaryCellularAutomataRuleset[3];
+				static bool rulesetPosition_4 = ElementaryCellularAutomataRuleset[4];
+				static bool rulesetPosition_5 = ElementaryCellularAutomataRuleset[5];
+				static bool rulesetPosition_6 = ElementaryCellularAutomataRuleset[6];
+				static bool rulesetPosition_7 = ElementaryCellularAutomataRuleset[7];
+
+				ImGui::Checkbox("##0", &rulesetPosition_0); ImGui::SameLine();
+				ImGui::Checkbox("##1", &rulesetPosition_1); ImGui::SameLine();
+				ImGui::Checkbox("##2", &rulesetPosition_2); ImGui::SameLine();
+				ImGui::Checkbox("##3", &rulesetPosition_3); ImGui::SameLine();
+				ImGui::Checkbox("##4", &rulesetPosition_4); ImGui::SameLine();
+				ImGui::Checkbox("##5", &rulesetPosition_5); ImGui::SameLine();
+				ImGui::Checkbox("##6", &rulesetPosition_6); ImGui::SameLine();
+				ImGui::Checkbox("##7", &rulesetPosition_7); 
+
+				ElementaryCellularAutomataRuleset[0] = rulesetPosition_0;
+				ElementaryCellularAutomataRuleset[1] = rulesetPosition_1;
+				ElementaryCellularAutomataRuleset[2] = rulesetPosition_2;
+				ElementaryCellularAutomataRuleset[3] = rulesetPosition_3;
+				ElementaryCellularAutomataRuleset[4] = rulesetPosition_4;
+				ElementaryCellularAutomataRuleset[5] = rulesetPosition_5;
+				ElementaryCellularAutomataRuleset[6] = rulesetPosition_6;
+				ElementaryCellularAutomataRuleset[7] = rulesetPosition_7;
+				
+				std::string rulesetReversedString = ElementaryCellularAutomataRuleset.to_string();
+				std::reverse(rulesetReversedString.begin(), rulesetReversedString.end());
+
+				std::string rulesetText = "Current Ruleset = " + rulesetReversedString;
+
+				ImGui::Text(rulesetText.data());
+				
+				if (ImGui::Button("Generate"))
+				{
+					testGrid.SetAllCellStates(ElementaryCellularAutomataRuleset);
+				}
+				
 				testGrid.draw_grid();
 				testGrid.draw_cells();
-
 
 				ImGui::EndTabItem();
 			}
 			
 			if (ImGui::BeginTabItem("2D Cellular Automata"))
 			{
-				// WIP
+				ImGui::Text("WIP...");
 
 				ImGui::EndTabItem();
 			}
 
 			if (ImGui::BeginTabItem("Conway's Game of Life"))
 			{
-				// WIP
+				ImGui::Text("WIP...");
 
 				ImGui::EndTabItem();
 			}

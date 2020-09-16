@@ -3,7 +3,7 @@
 #include <iostream>
 #include <algorithm>
 
-Elementary::Elementary() : m_cellMap(), m_ruleset("00000000"), m_numberOfCellsPerGeneration(264), m_numberOfGenerations(100) { };
+Elementary::Elementary() : m_cellMap(), m_ruleset("00000000"), m_numberOfCellsPerGeneration(200), m_numberOfGenerations(200) { };
 
 std::map<ImVec2, cellState>& Elementary::GetCellMap()
 {
