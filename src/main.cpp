@@ -222,7 +222,7 @@ int main(int, char**)
 				
 				if (ImGui::Button("Generate"))
 				{	
-					testGrid.SetAllCellStates();
+					testGrid.GenerateElementaryAutomata();
 				}
 				
 				testGrid.draw_grid();

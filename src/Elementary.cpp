@@ -39,10 +39,6 @@ cellState Elementary::GetCellState(ImVec2 cell)
 
 void Elementary::SetAllCellStates()
 {
-	GenerateCells();
-	float startPoint = m_numberOfCellsPerGeneration / 2;
-	SetSingleCellState(ImVec2(startPoint, 0), active);
-
 	for (auto& cell : m_cellMap)
 	{
 		// Excludes cells(x, 0) as this is the initial generation that contains a single active cell.
@@ -178,6 +174,14 @@ void Elementary::SetNumberOfGenerations(unsigned int number)
 std::bitset<8>& Elementary::Ruleset()
 {
 	return m_ruleset;
+}
+
+void Elementary::GenerateElementaryAutomata()
+{
+	GenerateCells();
+	float startPoint = m_numberOfCellsPerGeneration / 2;
+	SetSingleCellState(ImVec2(startPoint, 0), active);
+	SetAllCellStates();
 }
 
 Elementary::~Elementary()

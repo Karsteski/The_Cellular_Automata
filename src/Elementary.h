@@ -47,6 +47,8 @@ public:
 
 	std::bitset<8>& Ruleset();
 
+	void GenerateElementaryAutomata();
+
 	virtual ~Elementary();
 
 private:
