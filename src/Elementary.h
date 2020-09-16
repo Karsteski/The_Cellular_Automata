@@ -41,11 +41,11 @@ public:
 	void SetSingleCellState(ImVec2, cellState);
 	void SetNumberOfGenerations(unsigned int);
 	
-	void SetAllCellStates(std::bitset<8>);
+	void SetAllCellStates();
 
 	virtual void draw_cells() const;
 
-	void SetRandomRuleset();
+	std::bitset<8>& Ruleset();
 
 	virtual ~Elementary();
 

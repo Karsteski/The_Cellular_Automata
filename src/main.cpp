@@ -184,7 +184,7 @@ int main(int, char**)
 			// Needs to be its own function
 			if (ImGui::BeginTabItem("1D Cellular Automata"))
 			{
-				static std::bitset<8> ElementaryCellularAutomataRuleset("01011010");
+				auto& ElementaryCellularAutomataRuleset = testGrid.Ruleset();
 
 				static bool rulesetPosition_0 = ElementaryCellularAutomataRuleset[0];
 				static bool rulesetPosition_1 = ElementaryCellularAutomataRuleset[1];
@@ -218,11 +218,11 @@ int main(int, char**)
 
 				std::string rulesetText = "Current Ruleset = " + rulesetReversedString;
 
-				ImGui::Text(rulesetText.data());
+				ImGui::Text(rulesetText.c_str());
 				
 				if (ImGui::Button("Generate"))
-				{
-					testGrid.SetAllCellStates(ElementaryCellularAutomataRuleset);
+				{	
+					testGrid.SetAllCellStates();
 				}
 				
 				testGrid.draw_grid();
