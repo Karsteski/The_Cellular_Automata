@@ -181,7 +181,7 @@ int main(int, char**)
 				ImGui::EndTabItem();
 			}
 
-			
+			// Needs to be its own function
 			if (ImGui::BeginTabItem("1D Cellular Automata"))
 			{
 				static std::bitset<8> ElementaryCellularAutomataRuleset("01011010");
