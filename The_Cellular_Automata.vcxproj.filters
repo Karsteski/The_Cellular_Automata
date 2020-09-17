@@ -104,5 +104,8 @@
     <ClInclude Include="src\Elementary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\STL_Extensions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

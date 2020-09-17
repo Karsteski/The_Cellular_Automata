@@ -222,6 +222,8 @@ int main(int, char**)
 				
 				if (ImGui::Button("Generate"))
 				{	
+
+					// Next time, add try/catch for std::out_of_range
 					testGrid.GenerateElementaryAutomata();
 				}
 				

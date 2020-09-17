@@ -3,15 +3,17 @@
 #include <iostream>
 #include <algorithm>
 
+enum class CellState: bool { inactive = false, active = true };
+
 // Default ruleset is rule 90.
 Elementary::Elementary() : m_cellMap(), m_ruleset("01011010"), m_numberOfCellsPerGeneration(200), m_numberOfGenerations(200) { };
 
-std::map<ImVec2, cellState>& Elementary::GetCellMap()
+std::map<ImVec2, CellState>& Elementary::GetCellMap()
 {
 	return m_cellMap;
 }
 
-void Elementary::GenerateCells(cellState state = inactive)
+void Elementary::GenerateCells(CellState state = CellState::inactive)
 {
 	for (unsigned int generation = 0; generation < m_numberOfGenerations; ++generation)
 	{
@@ -25,15 +27,15 @@ void Elementary::GenerateCells(cellState state = inactive)
 	}	
 }
 
-void Elementary::SetSingleCellState(ImVec2 cell, cellState state)
+void Elementary::SetSingleCellState(ImVec2 cell, CellState state)
 {
 	m_cellMap.at(cell) = state;
 }
 
-cellState Elementary::GetCellState(ImVec2 cell)
+CellState Elementary::GetCellState(ImVec2 cell)
 {
 	auto iterator = m_cellMap.find(cell);
-	cellState state = iterator->second;
+	CellState state = iterator->second;
 	return state;
 }
 
@@ -52,14 +54,14 @@ void Elementary::SetAllCellStates()
 			ImVec2 prev_cell_2 = ImVec2(cell.first.x - 1, cell.first.y - 1);
 
 			// Checks previous neighbour cells' states, which determines the current cell's state based on the rule bitset (m_ruleset).
-			cellState defaultState = inactive;
-			cellState& state_0 = (m_cellMap.find(prev_cell_0) != m_cellMap.end()) ? m_cellMap.at(prev_cell_0) : defaultState;
-			cellState& state_1 = (m_cellMap.find(prev_cell_1) != m_cellMap.end()) ? m_cellMap.at(prev_cell_1) : defaultState;
-			cellState& state_2 = (m_cellMap.find(prev_cell_2) != m_cellMap.end()) ? m_cellMap.at(prev_cell_2) : defaultState;
+			CellState defaultState = CellState::inactive;
+			CellState& state_0 = (m_cellMap.find(prev_cell_0) != m_cellMap.end()) ? m_cellMap.at(prev_cell_0) : defaultState;
+			CellState& state_1 = (m_cellMap.find(prev_cell_1) != m_cellMap.end()) ? m_cellMap.at(prev_cell_1) : defaultState;
+			CellState& state_2 = (m_cellMap.find(prev_cell_2) != m_cellMap.end()) ? m_cellMap.at(prev_cell_2) : defaultState;
 
-			if (state_0 == active) previousCells[0].flip();
-			if (state_1 == active) previousCells[1].flip();
-			if (state_2 == active) previousCells[2].flip();
+			if (state_0 == CellState::active) previousCells[0].flip();
+			if (state_1 == CellState::active) previousCells[1].flip();
+			if (state_2 == CellState::active) previousCells[2].flip();
 
 			// Converts the bitset to a string for comparison using a switch statement.
 			auto neighbourCellsState = previousCells.to_string();
@@ -87,55 +89,54 @@ void Elementary::SetAllCellStates()
 				{ rulePosition_7, 7 }
 			};
 
-			// Problems here include C-style casts...
 			switch (ruleMap.at(neighbourCellsState))
 			{
 			case 0:
 			{
 				auto& targetCellState = cell.second;
-				targetCellState = static_cast<cellState>(m_ruleset.test(0));
+				targetCellState = static_cast<CellState>(m_ruleset.test(0));
 				break;
 			}
 			case 1:
 			{
 				auto& targetCellState = cell.second;
-				targetCellState = static_cast<cellState>(m_ruleset.test(1));
+				targetCellState = static_cast<CellState>(m_ruleset.test(1));
 				break;
 			}
 			case 2:
 			{
 				auto& targetCellState = cell.second;
-				targetCellState = static_cast<cellState>(m_ruleset.test(2));
+				targetCellState = static_cast<CellState>(m_ruleset.test(2));
 				break;
 			}
 			case 3:
 			{
 				auto& targetCellState = cell.second;
-				targetCellState = static_cast<cellState>(m_ruleset.test(3));
+				targetCellState = static_cast<CellState>(m_ruleset.test(3));
 				break;
 			}
 			case 4:
 			{
 				auto& targetCellState = cell.second;
-				targetCellState = static_cast<cellState>(m_ruleset.test(4));
+				targetCellState = static_cast<CellState>(m_ruleset.test(4));
 				break;
 			}
 			case 5:
 			{
 				auto& targetCellState = cell.second;
-				targetCellState = static_cast<cellState>(m_ruleset.test(5));
+				targetCellState = static_cast<CellState>(m_ruleset.test(5));
 				break;
 			}
 			case 6:
 			{
 				auto& targetCellState = cell.second;
-				targetCellState = static_cast<cellState>(m_ruleset.test(6));
+				targetCellState = static_cast<CellState>(m_ruleset.test(6));
 				break;
 			}
 			case 7:
 			{
 				auto& targetCellState = cell.second;
-				targetCellState = static_cast<cellState>(m_ruleset.test(7));
+				targetCellState = static_cast<CellState>(m_ruleset.test(7));
 				break;
 			}
 			}
@@ -152,7 +153,7 @@ void Elementary::draw_cells() const
 
 	for (const auto& cell : m_cellMap)
 	{
-		if (cell.second == active)
+		if (cell.second == CellState::active)
 		{
 			ImVec2 cell_pos_i = ImVec2(m_min_canvas_position.x + (cell.first.x * m_grid_steps), m_min_canvas_position.y + (cell.first.y * m_grid_steps));
 			ImVec2 cell_pos_f = ImVec2(cell_pos_i.x + m_grid_steps, cell_pos_i.y + m_grid_steps);
@@ -180,7 +181,7 @@ void Elementary::GenerateElementaryAutomata()
 {
 	GenerateCells();
 	float startPoint = m_numberOfCellsPerGeneration / 2;
-	SetSingleCellState(ImVec2(startPoint, 0), active);
+	SetSingleCellState(ImVec2(startPoint, 0), CellState::active);
 	SetAllCellStates();
 }
 

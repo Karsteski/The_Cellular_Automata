@@ -1,44 +1,31 @@
 #pragma once
 
-#include "Grid.h"
-#include "imgui.h"
+
 #include <map>
 #include <bitset>
 #include <utility>
 
-// So that ImVec2 can be used with std::map
-namespace std
-{
-	template<> struct less<ImVec2>
-	{
-		bool operator() (const ImVec2& lhs, const ImVec2& rhs) const
-		{
-			if (lhs.y == rhs.y)
-				return (lhs.x < rhs.x);
-			else
-				return (lhs.y < rhs.y);
-		}
-	};
-}
+#include "Grid.h"
+#include "imgui.h"
 
-enum cellState : bool { inactive = false, active = true };
+#include "STL_Extensions.h"
+
+enum class CellState : bool;
 
 class Elementary : public Grid
 {
 
 public:
 
-	
-
 	Elementary();
 	
-	std::map<ImVec2, cellState>& GetCellMap();
+	std::map<ImVec2, CellState>& GetCellMap();
 	unsigned int GetNumberOfGenerations();
 
-	cellState GetCellState(ImVec2);
-	void GenerateCells(cellState);
+	CellState GetCellState(ImVec2);
+	void GenerateCells(CellState);
 	
-	void SetSingleCellState(ImVec2, cellState);
+	void SetSingleCellState(ImVec2, CellState);
 	void SetNumberOfGenerations(unsigned int);
 	
 	void SetAllCellStates();
@@ -53,8 +40,7 @@ public:
 
 private:
 
-	
-	std::map<ImVec2, cellState> m_cellMap;
+	std::map<ImVec2, CellState> m_cellMap;
 	std::bitset<8> m_ruleset;
 	
 	unsigned int m_numberOfCellsPerGeneration;
