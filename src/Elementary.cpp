@@ -20,38 +20,50 @@ void Elementary::GenerateCells(CellState state = CellState::inactive)
 		for (unsigned int position = 0; position < m_numberOfCellsPerGeneration; ++position)
 		{
 			ImVec2 cell = ImVec2(position, generation);
-
 			m_cellMap.insert(std::make_pair(cell, state));
-
 		}
 	}	
 }
 
-void Elementary::SetSingleCellState(ImVec2 cell, CellState state)
+bool Elementary::SetSingleCellState(ImVec2 cell, CellState state)
 {
-	m_cellMap.at(cell) = state;
+	if (m_cellMap.find(cell) != m_cellMap.end())
+	{
+		m_cellMap[cell] = state;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 CellState Elementary::GetCellState(ImVec2 cell)
 {
-	auto iterator = m_cellMap.find(cell);
-	CellState state = iterator->second;
-	return state;
+	if (m_cellMap.find(cell) != m_cellMap.end())
+	{
+		auto state = m_cellMap.at(cell);
+		return state;
+	}
+	else
+	{
+		return CellState::inactive;
+	}
 }
 
 void Elementary::SetAllCellStates()
 {
-	for (auto& cell : m_cellMap)
+	for (auto& [cell, state] : m_cellMap)
 	{
 		// Excludes cells(x, 0) as this is the initial generation that contains a single active cell.
-		if (cell.first.y != 0)
+		if (cell.y != 0)
 		{
 			std::bitset<3> previousCells("000");
 
 			// Note that bitset reads from right to left, so 0 position is the furthest right bit.
-			ImVec2 prev_cell_0 = ImVec2(cell.first.x + 1, cell.first.y - 1);
-			ImVec2 prev_cell_1 = ImVec2(cell.first.x, cell.first.y - 1);
-			ImVec2 prev_cell_2 = ImVec2(cell.first.x - 1, cell.first.y - 1);
+			ImVec2 prev_cell_0 = ImVec2(cell.x + 1, cell.y - 1);
+			ImVec2 prev_cell_1 = ImVec2(cell.x, cell.y - 1);
+			ImVec2 prev_cell_2 = ImVec2(cell.x - 1, cell.y - 1);
 
 			// Checks previous neighbour cells' states, which determines the current cell's state based on the rule bitset (m_ruleset).
 			CellState defaultState = CellState::inactive;
@@ -63,7 +75,7 @@ void Elementary::SetAllCellStates()
 			if (state_1 == CellState::active) previousCells[1].flip();
 			if (state_2 == CellState::active) previousCells[2].flip();
 
-			// Converts the bitset to a string for comparison using a switch statement.
+			// For comparison using a switch statement.
 			auto neighbourCellsState = previousCells.to_string();
 
 			// This is the table that specifies a cell's state given its previous state, and the states of the cells to the left & right.
@@ -93,50 +105,42 @@ void Elementary::SetAllCellStates()
 			{
 			case 0:
 			{
-				auto& targetCellState = cell.second;
-				targetCellState = static_cast<CellState>(m_ruleset.test(0));
+				state = static_cast<CellState>(m_ruleset.test(0));
 				break;
 			}
 			case 1:
 			{
-				auto& targetCellState = cell.second;
-				targetCellState = static_cast<CellState>(m_ruleset.test(1));
+				state = static_cast<CellState>(m_ruleset.test(1));
 				break;
 			}
 			case 2:
 			{
-				auto& targetCellState = cell.second;
-				targetCellState = static_cast<CellState>(m_ruleset.test(2));
+				state = static_cast<CellState>(m_ruleset.test(2));
 				break;
 			}
 			case 3:
 			{
-				auto& targetCellState = cell.second;
-				targetCellState = static_cast<CellState>(m_ruleset.test(3));
+				state = static_cast<CellState>(m_ruleset.test(3));
 				break;
 			}
 			case 4:
 			{
-				auto& targetCellState = cell.second;
-				targetCellState = static_cast<CellState>(m_ruleset.test(4));
+				state = static_cast<CellState>(m_ruleset.test(4));
 				break;
 			}
 			case 5:
 			{
-				auto& targetCellState = cell.second;
-				targetCellState = static_cast<CellState>(m_ruleset.test(5));
+				state = static_cast<CellState>(m_ruleset.test(5));
 				break;
 			}
 			case 6:
 			{
-				auto& targetCellState = cell.second;
-				targetCellState = static_cast<CellState>(m_ruleset.test(6));
+				state = static_cast<CellState>(m_ruleset.test(6));
 				break;
 			}
 			case 7:
 			{
-				auto& targetCellState = cell.second;
-				targetCellState = static_cast<CellState>(m_ruleset.test(7));
+				state = static_cast<CellState>(m_ruleset.test(7));
 				break;
 			}
 			}
@@ -149,13 +153,11 @@ void Elementary::draw_cells() const
 	ImGuiIO& io = ImGui::GetIO();
 	ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
-	auto map = m_cellMap;
-
-	for (const auto& cell : m_cellMap)
+	for (const auto& [cell, state] : m_cellMap)
 	{
-		if (cell.second == CellState::active)
+		if (state == CellState::active)
 		{
-			ImVec2 cell_pos_i = ImVec2(m_min_canvas_position.x + (cell.first.x * m_grid_steps), m_min_canvas_position.y + (cell.first.y * m_grid_steps));
+			ImVec2 cell_pos_i = ImVec2(m_min_canvas_position.x + (cell.x * m_grid_steps), m_min_canvas_position.y + (cell.y * m_grid_steps));
 			ImVec2 cell_pos_f = ImVec2(cell_pos_i.x + m_grid_steps, cell_pos_i.y + m_grid_steps);
 			draw_list->AddRectFilled(cell_pos_i, cell_pos_f, m_cell_colour_main);
 		}
@@ -164,12 +166,12 @@ void Elementary::draw_cells() const
 
 unsigned int Elementary::GetNumberOfGenerations()
 {
-	return 0;
+	return m_numberOfGenerations;
 }
 
-void Elementary::SetNumberOfGenerations(unsigned int number)
+void Elementary::SetNumberOfGenerations(unsigned int input)
 {
-
+	m_numberOfGenerations = input;
 }
 
 std::bitset<8>& Elementary::Ruleset()

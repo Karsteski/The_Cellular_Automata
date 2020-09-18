@@ -25,7 +25,7 @@ public:
 	CellState GetCellState(ImVec2);
 	void GenerateCells(CellState);
 	
-	void SetSingleCellState(ImVec2, CellState);
+	bool SetSingleCellState(ImVec2, CellState);
 	void SetNumberOfGenerations(unsigned int);
 	
 	void SetAllCellStates();
