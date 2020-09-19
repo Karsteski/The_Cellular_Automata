@@ -30,7 +30,7 @@ public:
 	
 	void SetAllCellStates();
 
-	virtual void draw_cells() const;
+	virtual void DrawCells() const;
 
 	std::bitset<8>& Ruleset();
 

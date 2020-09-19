@@ -9,51 +9,48 @@ m_cell_colour_on(IM_COL32(25.0f, 25.0f, 25.0f, 255.0f)) {};
 
 
 // Probably want to convert this to a smart pointer...
-bool* Grid::enable_grid()
+void Grid::EnableGrid(bool input)
 {
-	return &m_enable_grid;
+	m_enable_grid = input;
 }
 
-ImVec2 Grid::get_min_canvas_position() const
+ImVec2 Grid::GetMinimumCanvasPosition() const
 {
 	return m_min_canvas_position;
 }
 
-ImVec2 Grid::get_max_canvas_position() const
+ImVec2 Grid::GetMaximumCanvasPosition() const
 {
 	return m_max_canvas_position;
 }
 
-ImVec2 Grid::get_canvas_size() const
+ImVec2 Grid::GetCanvasSize() const
 {
 	return m_canvas_size;
 }
 
-ImColor Grid::get_cell_colour_main()
+ImColor Grid::GetCellMainCellColour()
 {
 	return m_cell_colour_main;
 }
 
-float Grid::get_grid_steps() const
+float Grid::GetGridSteps() const
 {
 	return m_grid_steps;
 }
 
 // Only use positive integers or the negative sign will be dropped, as well as any decimals.
-void Grid::set_grid_steps(float grid_steps)
+void Grid::SetGridSteps(unsigned int gridSteps)
 {
-	grid_steps = std::abs(grid_steps);
-	grid_steps = std::trunc(grid_steps);
-
-	m_grid_steps = grid_steps;
+	m_grid_steps = gridSteps;
 }
 
-void Grid::set_cell_colour_main(ImColor colour)
+void Grid::SetMainCellColour(ImColor colour)
 {
 	m_cell_colour_main = colour;
 }
 
-void Grid::draw_grid()
+void Grid::DrawGrid()
 {
 	m_min_canvas_position = ImGui::GetCursorScreenPos();
 	m_canvas_size = ImGui::GetContentRegionAvail();
@@ -92,7 +89,7 @@ void Grid::draw_grid()
 }
 
 // Only use positive integers or the negative sign will be dropped, as well as any decimals.
-void Grid::draw_cells(std::vector<ImVec2> cells_to_draw) const
+void Grid::DrawCells(std::vector<ImVec2>& cells_to_draw) const
 {
 	ImGuiIO& io = ImGui::GetIO();
 	ImDrawList* draw_list = ImGui::GetWindowDrawList();

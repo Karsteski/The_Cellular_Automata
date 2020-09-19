@@ -10,21 +10,21 @@ public:
 	
 	Grid();
 
-	bool* enable_grid();
+	void EnableGrid(bool);
 	
-	ImVec2 get_min_canvas_position() const;
-	ImVec2 get_max_canvas_position() const;
-	ImVec2 get_canvas_size() const;
+	ImVec2 GetMinimumCanvasPosition() const;
+	ImVec2 GetMaximumCanvasPosition() const;
+	ImVec2 GetCanvasSize() const;
 
-	ImColor get_cell_colour_main();
+	ImColor GetCellMainCellColour();
 
-	float get_grid_steps() const;
-	void set_grid_steps(float);
+	float GetGridSteps() const;
+	void SetGridSteps(unsigned int);
 
-	void set_cell_colour_main(ImColor);
+	void SetMainCellColour(ImColor);
 
-	void draw_grid();
-	virtual void draw_cells(std::vector<ImVec2>) const;
+	void DrawGrid();
+	virtual void DrawCells(std::vector<ImVec2>&) const;
 
 	virtual ~Grid();
 
@@ -35,7 +35,7 @@ private:
 	ImVec2 m_min_canvas_position;
 	ImVec2 m_max_canvas_position;
 	
-	float m_grid_steps;
+	unsigned int m_grid_steps;
 
 	ImColor m_cell_colour_main;
 	ImColor m_cell_colour_off;

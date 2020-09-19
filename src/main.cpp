@@ -143,12 +143,14 @@ int main(int, char**)
 			if (ImGui::BeginTabItem("Basic Drawing Grid"))
 			{
 				static Grid basic_grid;
+				static bool gridSwitch = true;
+				ImGui::Checkbox("Enable Grid", &gridSwitch);
+				basic_grid.EnableGrid(gridSwitch);
 
-				ImGui::Checkbox("Enable Grid", basic_grid.enable_grid());
-				static int grid_steps = 10;
+				static int gridSteps = 10;
 				ImGui::SetNextItemWidth(100);
-				ImGui::SliderInt("Grid Step Size", &grid_steps, 1, 100);
-				basic_grid.set_grid_steps(static_cast<float>(grid_steps));
+				ImGui::SliderInt("Grid Step Size", &gridSteps, 1, 100);
+				basic_grid.SetGridSteps(gridSteps);
 
 				static int basic_rect_x = 0;
 				static int basic_rect_y = 0;
@@ -161,7 +163,7 @@ int main(int, char**)
 				ImGui::SetNextItemWidth(300);
 				static ImVec4 colour_picker = { 0.0f, 0.0f, 0.0f, 0.33f };
 				ImGui::ColorEdit4("Cell Colour", &colour_picker.x);
-				basic_grid.set_cell_colour_main((ImColor)colour_picker);
+				basic_grid.SetMainCellColour((ImColor)colour_picker);
 
 				ImGui::Separator();
 				
@@ -171,10 +173,10 @@ int main(int, char**)
 					if (basic_rect_x < 0) basic_rect_x = 0;
 					if (basic_rect_y < 0) basic_rect_y = 0;
 
-					basic_grid.draw_grid();
+					basic_grid.DrawGrid();
 
 					std::vector<ImVec2> basic_vec = { ImVec2(static_cast<float>(basic_rect_x), static_cast<float>(basic_rect_y)) };
-					basic_grid.draw_cells(basic_vec);
+					basic_grid.DrawCells(basic_vec);
 					ImGui::EndTabItem();
 					ImGui::EndTabBar();
 				}
@@ -227,8 +229,8 @@ int main(int, char**)
 					testGrid.GenerateElementaryAutomata();
 				}
 				
-				testGrid.draw_grid();
-				testGrid.draw_cells();
+				testGrid.DrawGrid();
+				testGrid.DrawCells();
 
 				ImGui::EndTabItem();
 			}

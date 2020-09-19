@@ -148,7 +148,7 @@ void Elementary::SetAllCellStates()
 	}
 }
 	
-void Elementary::draw_cells() const
+void Elementary::DrawCells() const
 {
 	ImGuiIO& io = ImGui::GetIO();
 	ImDrawList* draw_list = ImGui::GetWindowDrawList();
