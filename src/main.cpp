@@ -15,7 +15,8 @@
 
 // Desktop OpenGL function loader library.
 // Helper library to load OpenGL function pointers.
-#include <GL/gl3w.h>// Initialize with gl3wInit()
+// Initialize with gl3wInit()
+#include <GL/gl3w.h> 
 
 // Always include glfw3.h after OpenGL
 #include <GLFW/glfw3.h>
@@ -98,10 +99,6 @@ int main(int, char**)
 
 	// Window state
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-	
-	static Elementary testGrid;
-	
-	//Default ruleset is Rule 90 (https://mathworld.wolfram.com/ElementaryCellularAutomaton.html)
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -131,11 +128,17 @@ int main(int, char**)
 				ImGui::BeginMenuBar();
 
 				//Far more menu items to add.
-				if(ImGui::BeginMenu("Menu"))
+				if (ImGui::BeginMenu("Menu"))
 				{
 					ImGui::MenuItem("Show ImGui Demo Window", NULL, &show_demo_window);
 					ImGui::EndMenu();
 				}
+
+				if (show_demo_window)
+				{
+					ImGui::ShowDemoWindow(&show_demo_window);
+				}
+
 				ImGui::EndMenuBar();
 			}
 
@@ -186,8 +189,13 @@ int main(int, char**)
 			// Needs to be its own function
 			if (ImGui::BeginTabItem("1D Cellular Automata"))
 			{
-				auto& ElementaryCellularAutomataRuleset = testGrid.Ruleset();
-
+				static Elementary elementaryAutomata;
+				auto& ElementaryCellularAutomataRuleset = elementaryAutomata.Ruleset();
+				
+				// Can't pass individual bits by reference, therefore the following repeated code is a necessary evil,
+				// unless a workaround is implemented to make a vector<bool> act like a regular STL container.
+				// Note vector<bool> is not individually addressable because of its special implementation. (https://en.cppreference.com/w/cpp/container/vector_bool)
+				// Not worth the trouble in my opinion...
 				static bool rulesetPosition_0 = ElementaryCellularAutomataRuleset[0];
 				static bool rulesetPosition_1 = ElementaryCellularAutomataRuleset[1];
 				static bool rulesetPosition_2 = ElementaryCellularAutomataRuleset[2];
@@ -215,6 +223,7 @@ int main(int, char**)
 				ElementaryCellularAutomataRuleset[6] = rulesetPosition_6;
 				ElementaryCellularAutomataRuleset[7] = rulesetPosition_7;
 				
+				// Bitset is read in reverse order
 				std::string rulesetReversedString = ElementaryCellularAutomataRuleset.to_string();
 				std::reverse(rulesetReversedString.begin(), rulesetReversedString.end());
 
@@ -224,13 +233,18 @@ int main(int, char**)
 				
 				if (ImGui::Button("Generate"))
 				{	
-
-					// Next time, add try/catch for std::out_of_range
-					testGrid.GenerateElementaryAutomata();
+					try
+					{
+						elementaryAutomata.GenerateElementaryAutomata();
+					}
+					catch (const std::out_of_range&)
+					{
+						ImGui::SetTooltip("There was an out of range error!");
+					}
 				}
 				
-				testGrid.DrawGrid();
-				testGrid.DrawCells();
+				elementaryAutomata.DrawGrid();
+				elementaryAutomata.DrawCells();
 
 				ImGui::EndTabItem();
 			}
@@ -251,11 +265,6 @@ int main(int, char**)
 
 			ImGui::EndTabBar();
 			ImGui::End();
-		}
-
-		{
-			if (show_demo_window)
-				ImGui::ShowDemoWindow(&show_demo_window);
 		}
 
 		// Rendering

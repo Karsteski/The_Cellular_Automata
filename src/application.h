@@ -1,8 +1,14 @@
 #pragma once
 
+#include <vector>
+#include <bitset>
+#include <string>
+
 #include "imgui.h"
+
 namespace KSS
 {
+
 	void CallMenu();
 
 	void CallBasicDrawingGrid();
@@ -13,4 +19,7 @@ namespace KSS
 
 	void CallGameOfLife();
 
+	static void HelpMarker(std::string);
+
 }
+

@@ -2,7 +2,6 @@
 
 #include "imgui.h"
 #include <vector>
-#include <memory>
 
 class Grid
 {
@@ -35,6 +34,7 @@ private:
 	ImVec2 m_min_canvas_position;
 	ImVec2 m_max_canvas_position;
 	
+	ImVec2 m_grid_scrolling;
 	unsigned int m_grid_steps;
 
 	ImColor m_cell_colour_main;

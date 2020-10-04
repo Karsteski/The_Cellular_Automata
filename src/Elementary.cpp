@@ -5,7 +5,7 @@
 
 enum class CellState: bool { inactive = false, active = true };
 
-// Default ruleset is rule 90.
+// Default ruleset is rule 90. (https://mathworld.wolfram.com/ElementaryCellularAutomaton.html)
 Elementary::Elementary() : m_cellMap(), m_ruleset("01011010"), m_numberOfCellsPerGeneration(200), m_numberOfGenerations(200) { };
 
 std::map<ImVec2, CellState>& Elementary::GetCellMap()
@@ -157,8 +157,10 @@ void Elementary::DrawCells() const
 	{
 		if (state == CellState::active)
 		{
-			ImVec2 cell_pos_i = ImVec2(m_min_canvas_position.x + (cell.x * m_grid_steps), m_min_canvas_position.y + (cell.y * m_grid_steps));
-			ImVec2 cell_pos_f = ImVec2(cell_pos_i.x + m_grid_steps, cell_pos_i.y + m_grid_steps);
+			const ImVec2 origin = ImVec2(m_min_canvas_position.x + m_grid_scrolling.x, m_min_canvas_position.y + m_grid_scrolling.y);
+			const ImVec2 cell_pos_i = ImVec2(origin.x + (cell.x * m_grid_steps), origin.y + (cell.y * m_grid_steps));
+			const ImVec2 cell_pos_f = ImVec2(cell_pos_i.x + m_grid_steps, cell_pos_i.y + m_grid_steps);
+
 			draw_list->AddRectFilled(cell_pos_i, cell_pos_f, m_cell_colour_main);
 		}
 	}
@@ -187,7 +189,4 @@ void Elementary::GenerateElementaryAutomata()
 	SetAllCellStates();
 }
 
-Elementary::~Elementary()
-{
-
-}
+Elementary::~Elementary() = default;
