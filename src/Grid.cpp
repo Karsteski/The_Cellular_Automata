@@ -84,6 +84,7 @@ void Grid::DrawGrid()
 	if (m_enable_grid)
 	{
 		// Draw grid lines
+		draw_list->PushClipRect(m_min_canvas_position, m_max_canvas_position, true);
 		for (float x = std::fmod(m_grid_scrolling.x, m_grid_steps); x < m_canvas_size.x; x += m_grid_steps)
 		{
 			draw_list->AddLine(ImVec2(m_min_canvas_position.x + x, m_min_canvas_position.y), ImVec2(m_min_canvas_position.x + x, m_max_canvas_position.y), IM_COL32(200, 200, 200, 40));
@@ -93,6 +94,7 @@ void Grid::DrawGrid()
 		{
 			draw_list->AddLine(ImVec2(m_min_canvas_position.x, m_min_canvas_position.y + y), ImVec2(m_max_canvas_position.x, m_min_canvas_position.y + y), IM_COL32(200, 200, 200, 40));
 		}
+		draw_list->PopClipRect();
 	}
 }
 
@@ -122,7 +124,9 @@ void Grid::DrawCells(std::vector<ImVec2>& cells_to_draw) const
 		ImVec2 cell_pos_i = ImVec2(origin.x + (cell.x * m_grid_steps), origin.y + (cell.y * m_grid_steps));
 		ImVec2 cell_pos_f = ImVec2(cell_pos_i.x + m_grid_steps, cell_pos_i.y + m_grid_steps);
 
+		draw_list->PushClipRect(m_min_canvas_position, m_max_canvas_position, true);
 		draw_list->AddRectFilled(cell_pos_i, cell_pos_f, m_cell_colour_main);
+		draw_list->PopClipRect();
 	}
 }
 
