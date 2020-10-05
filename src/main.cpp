@@ -103,9 +103,6 @@ int main(int, char**)
 	// Window state
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-	static GameOfLife ConwaysGameOfLife;
-	ConwaysGameOfLife.GenerateCells();
-
 	while (!glfwWindowShouldClose(window))
 	{
 		// Poll and handle events (inputs, window resize, etc.)
@@ -257,20 +254,33 @@ int main(int, char**)
 			
 			if (ImGui::BeginTabItem("Conway's Game of Life"))
 			{
-				using namespace std::chrono_literals;
-				// Only want to run this code once.
-				/*
-				static bool runFlag = true;
-				while (runFlag)
+				static GameOfLife ConwaysGameOfLife;
+
+				auto [width, height] = ConwaysGameOfLife.GetGameDimensions();
+				static int gameWidth = width;
+				static int gameHeight = height;
+
+				ImGui::SetNextItemWidth(100);
+				ImGui::InputInt("Game Width", &gameWidth);
+				ImGui::SameLine(); ImGui::SetNextItemWidth(100);
+				ImGui::InputInt("Game Height", &gameHeight);
+
+				ConwaysGameOfLife.SetGameDimensions(ImVec2(gameWidth, gameHeight));
+
+				if (ImGui::Button("Generate"))
 				{
 					ConwaysGameOfLife.GenerateCells();
-					runFlag = false;
 				}
-				*/
+				
+				static int gridSteps = 5;
+				ImGui::SetNextItemWidth(100);
+				ImGui::SliderInt("Grid Step Size", &gridSteps, 1, 100);
+				ConwaysGameOfLife.SetGridSteps(gridSteps);
+
 				ConwaysGameOfLife.SetAllCellStates();
 				ConwaysGameOfLife.DrawGrid();
 				ConwaysGameOfLife.DrawCells();
-				std::this_thread::sleep_for(50ms);
+
 				ImGui::EndTabItem();
 			}
 

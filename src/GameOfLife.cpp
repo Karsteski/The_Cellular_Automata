@@ -4,6 +4,20 @@
 
 GameOfLife::GameOfLife() : m_cellMap(), m_gridDimensions(100.0f, 100.0f) { };
 
+ImVec2 GameOfLife::GetGameDimensions()
+{
+	return m_gridDimensions;
+}
+
+void GameOfLife::SetGameDimensions(ImVec2 dimensions)
+{
+	if (dimensions.x > 0 and dimensions.y > 0)
+	{
+		m_gridDimensions.x = std::trunc(dimensions.x);
+		m_gridDimensions.y = std::trunc(dimensions.y);
+	}
+}
+
 std::map<ImVec2, CellState>& GameOfLife::GetCellMap()
 {
 	return m_cellMap;
@@ -11,6 +25,8 @@ std::map<ImVec2, CellState>& GameOfLife::GetCellMap()
 
 void GameOfLife::GenerateCells()
 {
+	m_cellMap.clear();
+
 	for (unsigned int x = 0; x < m_gridDimensions.x; ++x)
 	{
 		for (unsigned int y = 0; y < m_gridDimensions.y; ++y)
@@ -21,7 +37,6 @@ void GameOfLife::GenerateCells()
 				state = CellState::active;
 			else
 				state = CellState::inactive;
-
 			m_cellMap.insert(std::make_pair(cell, state));
 		}
 	}
@@ -55,7 +70,11 @@ CellState GameOfLife::GetCellState(ImVec2 cell)
 
 void GameOfLife::SetAllCellStates()
 {
-	for (auto& [cell, state] : m_cellMap)
+	// Buffer as I can't read and write to the cellMap at the same time, as the cells written to affect the next cells.
+	std::map<ImVec2, CellState> cellMapBuffer;
+
+	// Can't pass by reference for the above reason. Expensive copy!
+	for (auto [cell, state] : m_cellMap)
 	{
 		//Cell positions relative to the current cell (C). 
 		/*
@@ -97,7 +116,6 @@ void GameOfLife::SetAllCellStates()
 		{
 		case (CellState::active):
 		{
-
 			if (numberOfActiveNeighbours < 2) // Cell dies by underpopulation.
 				state = CellState::inactive;
 			else if (numberOfActiveNeighbours == 2 or numberOfActiveNeighbours == 3) // Cell is happy and lives on :)
@@ -110,16 +128,15 @@ void GameOfLife::SetAllCellStates()
 		{
 			if (numberOfActiveNeighbours == 3) // Cells reproduce to create a live cell. 
 				state = CellState::active;
-			else
-				state = CellState::inactive;
 			break;
 		}
-		default:
-			state = CellState::inactive;
 		}
-	}
-}
 
+		cellMapBuffer.insert(std::make_pair(cell, state));
+	}
+
+	m_cellMap = cellMapBuffer;
+}
 
 void GameOfLife::DrawCells() const
 {

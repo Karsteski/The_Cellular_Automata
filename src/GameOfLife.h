@@ -17,6 +17,9 @@ public:
 
 	GameOfLife();
 
+	ImVec2 GetGameDimensions();
+	void SetGameDimensions(ImVec2);
+
 	std::map<ImVec2, CellState>& GetCellMap();
 
 	CellState GetCellState(ImVec2);
