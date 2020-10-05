@@ -3,10 +3,8 @@
 #include <iostream>
 #include <algorithm>
 
-enum class CellState: bool { inactive = false, active = true };
-
 // Default ruleset is rule 90. (https://mathworld.wolfram.com/ElementaryCellularAutomaton.html)
-Elementary::Elementary() : m_cellMap(), m_ruleset("01011010"), m_numberOfCellsPerGeneration(400), m_numberOfGenerations(500) { };
+Elementary::Elementary() : m_cellMap(), m_ruleset("01011010"), m_numberOfCellsPerGeneration(200), m_numberOfGenerations(500) { };
 
 std::map<ImVec2, CellState>& Elementary::GetCellMap()
 {

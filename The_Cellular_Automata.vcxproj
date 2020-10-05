@@ -155,6 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\GameOfLife.cpp" />
     <ClCompile Include="src\application.cpp" />
     <ClCompile Include="src\Elementary.cpp" />
     <ClCompile Include="src\Grid.cpp" />
@@ -169,6 +170,7 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\GameOfLife.h" />
     <ClInclude Include="src\Elementary.h" />
     <ClInclude Include="src\Grid.h" />
     <ClInclude Include="src\application.h" />

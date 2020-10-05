@@ -42,5 +42,6 @@ private:
 	ImColor m_cell_colour_on;
 
 	friend class Elementary;
+	friend class GameOfLife;
 
 };

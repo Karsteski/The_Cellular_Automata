@@ -1,11 +1,14 @@
 
 #include <iostream>
 #include <vector>
+#include <chrono>
+#include <thread>
 
 // Application 
 #include "Application.h"
 #include "Grid.h"
 #include "Elementary.h"
+#include "GameOfLife.h"
 
 // (GLFW is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan/Metal graphics context creation, etc.)
 #include "imgui.h"
@@ -99,6 +102,9 @@ int main(int, char**)
 
 	// Window state
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+	static GameOfLife ConwaysGameOfLife;
+	ConwaysGameOfLife.GenerateCells();
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -249,17 +255,22 @@ int main(int, char**)
 				ImGui::EndTabItem();
 			}
 			
-			if (ImGui::BeginTabItem("2D Cellular Automata"))
-			{
-				ImGui::Text("WIP...");
-
-				ImGui::EndTabItem();
-			}
-
 			if (ImGui::BeginTabItem("Conway's Game of Life"))
 			{
-				ImGui::Text("WIP...");
-
+				using namespace std::chrono_literals;
+				// Only want to run this code once.
+				/*
+				static bool runFlag = true;
+				while (runFlag)
+				{
+					ConwaysGameOfLife.GenerateCells();
+					runFlag = false;
+				}
+				*/
+				ConwaysGameOfLife.SetAllCellStates();
+				ConwaysGameOfLife.DrawGrid();
+				ConwaysGameOfLife.DrawCells();
+				std::this_thread::sleep_for(50ms);
 				ImGui::EndTabItem();
 			}
 

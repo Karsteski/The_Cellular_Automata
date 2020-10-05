@@ -10,7 +10,7 @@
 
 #include "STL_Extensions.h"
 
-enum class CellState : bool;
+enum class CellState : bool { inactive = false, active = true };
 
 class Elementary : public Grid
 {
