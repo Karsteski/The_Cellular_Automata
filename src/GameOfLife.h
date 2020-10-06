@@ -4,11 +4,12 @@
 #include <map>
 #include <bitset>
 #include <utility>
+#include <string>
 
 #include "Grid.h"
 #include "imgui.h"
 
-
+enum class Pattern : int { R_Pentomino = 0, Glider_Gun = 1, Infinite_Growth = 2 };
 
 class GameOfLife : public Grid
 {
@@ -23,7 +24,10 @@ public:
 	std::map<ImVec2, CellState>& GetCellMap();
 
 	CellState GetCellState(ImVec2);
-	void GenerateCells();
+	
+	void GenerateEmptyCells();
+	void GenerateRandomCells();
+	void GeneratePattern(Pattern);
 
 	bool SetSingleCellState(ImVec2, CellState);
 

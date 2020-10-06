@@ -1,8 +1,9 @@
 #include "GameOfLife.h"
 #include <iostream>
 #include <algorithm>
+#include <ctime>
 
-GameOfLife::GameOfLife() : m_cellMap(), m_gridDimensions(100.0f, 100.0f) { };
+GameOfLife::GameOfLife() : m_cellMap(), m_gridDimensions(150.0f, 150.0f) { };
 
 ImVec2 GameOfLife::GetGameDimensions()
 {
@@ -23,9 +24,25 @@ std::map<ImVec2, CellState>& GameOfLife::GetCellMap()
 	return m_cellMap;
 }
 
-void GameOfLife::GenerateCells()
+void GameOfLife::GenerateEmptyCells()
 {
 	m_cellMap.clear();
+	for (unsigned int x = 0; x < m_gridDimensions.x; ++x)
+	{
+		for (unsigned int y = 0; y < m_gridDimensions.y; ++y)
+		{
+			ImVec2 cell = ImVec2(x, y);
+			CellState state = CellState::inactive;
+			m_cellMap.insert(std::make_pair(cell, state));
+		}
+	}
+}
+
+void GameOfLife::GenerateRandomCells()
+{
+	m_cellMap.clear();
+	// Time returns # of seconds since Jan 1st, 1970, making rand() seem truly random unless called w/in same second.
+	std::srand(static_cast<int>(time(0)));
 
 	for (unsigned int x = 0; x < m_gridDimensions.x; ++x)
 	{
@@ -33,12 +50,113 @@ void GameOfLife::GenerateCells()
 		{
 			ImVec2 cell = ImVec2(x, y);
 			CellState state;
+			
 			if (rand() % 2)
 				state = CellState::active;
 			else
 				state = CellState::inactive;
 			m_cellMap.insert(std::make_pair(cell, state));
 		}
+	}
+}
+
+// Hard coded patterns for now.
+// X = starting point, # = active cell, _ = inactive cell.
+/*R-Pentonimo:
+* X__##_
+* __##__
+* ___#__
+*/
+
+void GameOfLife::GeneratePattern(Pattern pattern)
+{
+	GenerateEmptyCells();
+	ImVec2 startPoint = ImVec2(m_gridDimensions.x / 2, m_gridDimensions.y / 2);
+
+	switch (pattern)
+	{
+	case Pattern::R_Pentomino:
+	{
+		ImVec2 cell_1 = ImVec2(startPoint.x + 3, startPoint.y);
+		ImVec2 cell_2 = ImVec2(startPoint.x + 4, startPoint.y);
+		ImVec2 cell_3 = ImVec2(startPoint.x + 2, startPoint.y + 1);
+		ImVec2 cell_4 = ImVec2(startPoint.x + 3, startPoint.y + 1);
+		ImVec2 cell_5 = ImVec2(startPoint.x + 3, startPoint.y + 2);
+		std::vector<ImVec2> testVector = { cell_1, cell_2, cell_3, cell_4, cell_5 };
+		for (auto& [cell, state] : m_cellMap)
+		{
+			for (auto& testCell : testVector)
+			{
+				// Sigh need to overload "==" for ImVec2...
+				if (cell.x == testCell.x and cell.y == testCell.y)
+					state = CellState::active;
+			}
+		}
+
+		break;
+	}
+	case Pattern::Glider_Gun:
+	{
+
+		// Currently unimplemented as it'd take too long to hardcode this...
+		break;
+	}
+	case Pattern::Infinite_Growth:
+	{
+		startPoint = ImVec2(m_gridDimensions.x / 3, m_gridDimensions.y / 2);
+
+		ImVec2 cell_1 = ImVec2(startPoint.x + 1, startPoint.y);
+		ImVec2 cell_2 = ImVec2(startPoint.x + 2, startPoint.y);
+		ImVec2 cell_3 = ImVec2(startPoint.x + 3, startPoint.y);
+		ImVec2 cell_4 = ImVec2(startPoint.x + 4, startPoint.y);
+		ImVec2 cell_5 = ImVec2(startPoint.x + 5, startPoint.y);
+		ImVec2 cell_6 = ImVec2(startPoint.x + 6, startPoint.y);
+		ImVec2 cell_7 = ImVec2(startPoint.x + 7, startPoint.y);
+		ImVec2 cell_8 = ImVec2(startPoint.x + 8, startPoint.y);
+
+		ImVec2 cell_9 = ImVec2(startPoint.x + 10, startPoint.y);
+		ImVec2 cell_10 = ImVec2(startPoint.x + 11, startPoint.y);
+		ImVec2 cell_11 = ImVec2(startPoint.x + 12, startPoint.y);
+		ImVec2 cell_12 = ImVec2(startPoint.x + 13, startPoint.y);
+		ImVec2 cell_13 = ImVec2(startPoint.x + 14, startPoint.y);
+
+		ImVec2 cell_14 = ImVec2(startPoint.x + 18, startPoint.y);
+		ImVec2 cell_15 = ImVec2(startPoint.x + 19, startPoint.y);
+		ImVec2 cell_16 = ImVec2(startPoint.x + 20, startPoint.y);
+
+		ImVec2 cell_17 = ImVec2(startPoint.x + 27, startPoint.y);
+		ImVec2 cell_18 = ImVec2(startPoint.x + 28, startPoint.y);
+		ImVec2 cell_19 = ImVec2(startPoint.x + 29, startPoint.y);
+		ImVec2 cell_20 = ImVec2(startPoint.x + 30, startPoint.y);
+		ImVec2 cell_21 = ImVec2(startPoint.x + 31, startPoint.y);
+		ImVec2 cell_22 = ImVec2(startPoint.x + 32, startPoint.y);
+		ImVec2 cell_23 = ImVec2(startPoint.x + 33, startPoint.y);
+
+		ImVec2 cell_24 = ImVec2(startPoint.x + 35, startPoint.y);
+		ImVec2 cell_25 = ImVec2(startPoint.x + 36, startPoint.y);
+		ImVec2 cell_26 = ImVec2(startPoint.x + 37, startPoint.y);
+		ImVec2 cell_27 = ImVec2(startPoint.x + 38, startPoint.y);
+		ImVec2 cell_28 = ImVec2(startPoint.x + 39, startPoint.y);
+
+		std::vector<ImVec2> testVector = 
+		{ 
+		cell_1, cell_2, cell_3, cell_4, cell_5, cell_6, cell_7, cell_8, cell_9, cell_10,
+		cell_11, cell_12, cell_13, cell_14, cell_15, cell_16, cell_17, cell_18, cell_19, 
+		cell_20, cell_21, cell_22, cell_23, cell_24, cell_25, cell_26, cell_27, cell_28
+		};
+
+		for (auto& [cell, state] : m_cellMap)
+		{
+			for (auto& testCell : testVector)
+			{
+				// Sigh need to overload "==" for ImVec2...
+				if (cell.x == testCell.x and cell.y == testCell.y)
+					state = CellState::active;
+			}
+		}
+
+		break;
+	}
 	}
 }
 

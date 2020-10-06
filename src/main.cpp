@@ -190,7 +190,7 @@ int main(int, char**)
 			}
 
 			// Needs to be its own function
-			if (ImGui::BeginTabItem("1D Cellular Automata"))
+			if (ImGui::BeginTabItem("Elementary Cellular Automata"))
 			{
 				static Elementary elementaryAutomata;
 				auto& ElementaryCellularAutomataRuleset = elementaryAutomata.Ruleset();
@@ -252,7 +252,7 @@ int main(int, char**)
 				ImGui::EndTabItem();
 			}
 			
-			if (ImGui::BeginTabItem("Conway's Game of Life"))
+			if (ImGui::BeginTabItem("Game of Life"))
 			{
 				static GameOfLife ConwaysGameOfLife;
 
@@ -267,14 +267,36 @@ int main(int, char**)
 
 				ConwaysGameOfLife.SetGameDimensions(ImVec2(gameWidth, gameHeight));
 
+				static int radioButtonSwitch = 0;
+				ImGui::RadioButton("Conway's Game of Life", &radioButtonSwitch, 0); ImGui::SameLine();
+				ImGui::RadioButton("R-Pentomino", &radioButtonSwitch, 1); ImGui::SameLine();
+				ImGui::RadioButton("Infinite Growth", &radioButtonSwitch, 2);
+
 				if (ImGui::Button("Generate"))
 				{
-					ConwaysGameOfLife.GenerateCells();
+					switch (radioButtonSwitch)
+					{
+					case 0:
+					{
+						ConwaysGameOfLife.GenerateRandomCells();
+						break;
+					}
+					case 1:
+					{
+						ConwaysGameOfLife.GeneratePattern(Pattern::R_Pentomino);
+						break;
+					}
+					case 2:
+					{
+						ConwaysGameOfLife.GeneratePattern(Pattern::Infinite_Growth);
+						break;
+					}
+					}
 				}
 				
 				static int gridSteps = 5;
 				ImGui::SetNextItemWidth(100);
-				ImGui::SliderInt("Grid Step Size", &gridSteps, 1, 100);
+				ImGui::SliderInt("Zoom", &gridSteps, 1, 100);
 				ConwaysGameOfLife.SetGridSteps(gridSteps);
 
 				ConwaysGameOfLife.SetAllCellStates();
