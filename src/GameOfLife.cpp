@@ -41,7 +41,7 @@ void GameOfLife::GenerateEmptyCells()
 void GameOfLife::GenerateRandomCells()
 {
 	m_cellMap.clear();
-	// Time returns # of seconds since Jan 1st, 1970, making rand() seem truly random unless called w/in same second.
+	// Time returns # of seconds since Jan 1st, 1970, making rand() seem truly random unless called within the same second.
 	std::srand(static_cast<int>(time(0)));
 
 	for (unsigned int x = 0; x < m_gridDimensions.x; ++x)
@@ -60,29 +60,71 @@ void GameOfLife::GenerateRandomCells()
 	}
 }
 
-// Hard coded patterns for now.
-// X = starting point, # = active cell, _ = inactive cell.
-/*R-Pentonimo:
-* X__##_
-* __##__
-* ___#__
-*/
 
 void GameOfLife::GeneratePattern(Pattern pattern)
 {
 	GenerateEmptyCells();
 	ImVec2 startPoint = ImVec2(m_gridDimensions.x / 2, m_gridDimensions.y / 2);
+	
+	// 'X' = starting point (0, 0), '#' = active cell, '.' = inactive cell.
+	const auto ConvertToPattern = [=](std::string inputString)
+	{
+		int gridRow = 0;
+		int gridColumn = 0;
+		std::vector<ImVec2> cellsToWrite;
+		auto startPoint = ImVec2(m_gridDimensions.x / 3, m_gridDimensions.y / 2);
+		for (const auto& stringCell : inputString)
+		{
+			++gridRow;
+
+			if (stringCell == '#')
+			{
+				cellsToWrite.push_back(ImVec2(startPoint.x + gridRow, startPoint.y + gridColumn));
+			}
+			else if (stringCell == '\n')
+			{
+				gridRow = 0;
+				++gridColumn;
+			}
+		}
+		
+		return cellsToWrite;
+	};
 
 	switch (pattern)
 	{
 	case Pattern::R_Pentomino:
 	{
+		/*
+		/*R-Pentonimo:
+		* X..##.
+		* ..##..
+		* ...#..
+
 		ImVec2 cell_1 = ImVec2(startPoint.x + 3, startPoint.y);
 		ImVec2 cell_2 = ImVec2(startPoint.x + 4, startPoint.y);
 		ImVec2 cell_3 = ImVec2(startPoint.x + 2, startPoint.y + 1);
 		ImVec2 cell_4 = ImVec2(startPoint.x + 3, startPoint.y + 1);
 		ImVec2 cell_5 = ImVec2(startPoint.x + 3, startPoint.y + 2);
 		std::vector<ImVec2> testVector = { cell_1, cell_2, cell_3, cell_4, cell_5 };
+		for (auto& [cell, state] : m_cellMap)
+		{
+			for (auto& testCell : testVector)
+			{
+				// Sigh need to overload "==" for ImVec2...
+				if (cell.x == testCell.x and cell.y == testCell.y)
+					state = CellState::active;
+			}
+		}
+		*/
+		//startPoint = ImVec2(m_gridDimensions.x / 3, m_gridDimensions.y / 2);
+
+		std::string R_Pentomino =
+		"X..##.\n"
+		"..##..\n"
+		"...#..";
+
+		auto testVector = ConvertToPattern(R_Pentomino);
 		for (auto& [cell, state] : m_cellMap)
 		{
 			for (auto& testCell : testVector)
