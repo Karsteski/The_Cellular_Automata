@@ -38,10 +38,7 @@ private:
 	unsigned int m_grid_steps;
 
 	ImColor m_cell_colour_main;
-	ImColor m_cell_colour_on;
-	ImColor m_cell_colour_off;
 
 	friend class Elementary;
 	friend class GameOfLife;
-
 };

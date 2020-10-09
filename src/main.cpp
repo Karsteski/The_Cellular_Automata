@@ -270,7 +270,8 @@ int main(int, char**)
 				static int radioButtonSwitch = 0;
 				ImGui::RadioButton("Conway's Game of Life", &radioButtonSwitch, 0); ImGui::SameLine();
 				ImGui::RadioButton("R-Pentomino", &radioButtonSwitch, 1); ImGui::SameLine();
-				ImGui::RadioButton("Infinite Growth", &radioButtonSwitch, 2);
+				ImGui::RadioButton("Glider Gun", &radioButtonSwitch, 2); ImGui::SameLine();
+				ImGui::RadioButton("Infinite Growth", &radioButtonSwitch, 3);
 
 				if (ImGui::Button("Generate"))
 				{
@@ -287,6 +288,11 @@ int main(int, char**)
 						break;
 					}
 					case 2:
+					{
+						ConwaysGameOfLife.GeneratePattern(Pattern::Glider_Gun);
+						break;
+					}
+					case 3:
 					{
 						ConwaysGameOfLife.GeneratePattern(Pattern::Infinite_Growth);
 						break;

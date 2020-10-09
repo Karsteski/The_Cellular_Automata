@@ -64,15 +64,14 @@ void GameOfLife::GenerateRandomCells()
 void GameOfLife::GeneratePattern(Pattern pattern)
 {
 	GenerateEmptyCells();
-	ImVec2 startPoint = ImVec2(m_gridDimensions.x / 2, m_gridDimensions.y / 2);
-	
+
 	// 'X' = starting point (0, 0), '#' = active cell, '.' = inactive cell.
-	const auto ConvertToPattern = [=](std::string inputString)
+	const auto StringPatternToCells = [=](std::string inputString)
 	{
 		int gridRow = 0;
 		int gridColumn = 0;
 		std::vector<ImVec2> cellsToWrite;
-		auto startPoint = ImVec2(m_gridDimensions.x / 3, m_gridDimensions.y / 2);
+		ImVec2 startPoint = ImVec2(m_gridDimensions.x / 3, m_gridDimensions.y / 2);
 		for (const auto& stringCell : inputString)
 		{
 			++gridRow;
@@ -87,115 +86,61 @@ void GameOfLife::GeneratePattern(Pattern pattern)
 				++gridColumn;
 			}
 		}
-		
+
 		return cellsToWrite;
+	};
+
+	auto cellTester = [&](std::vector<ImVec2>& inputVector)
+	{
+		for (auto& [cell, state] : m_cellMap)
+		{
+			for (auto& testCell : inputVector)
+			{
+				// Sigh need to overload "==" for ImVec2... or switch to std::pair.
+				if (cell.x == testCell.x and cell.y == testCell.y)
+					state = CellState::active;
+			}
+		}
 	};
 
 	switch (pattern)
 	{
 	case Pattern::R_Pentomino:
 	{
-		/*
-		/*R-Pentonimo:
-		* X..##.
-		* ..##..
-		* ...#..
-
-		ImVec2 cell_1 = ImVec2(startPoint.x + 3, startPoint.y);
-		ImVec2 cell_2 = ImVec2(startPoint.x + 4, startPoint.y);
-		ImVec2 cell_3 = ImVec2(startPoint.x + 2, startPoint.y + 1);
-		ImVec2 cell_4 = ImVec2(startPoint.x + 3, startPoint.y + 1);
-		ImVec2 cell_5 = ImVec2(startPoint.x + 3, startPoint.y + 2);
-		std::vector<ImVec2> testVector = { cell_1, cell_2, cell_3, cell_4, cell_5 };
-		for (auto& [cell, state] : m_cellMap)
-		{
-			for (auto& testCell : testVector)
-			{
-				// Sigh need to overload "==" for ImVec2...
-				if (cell.x == testCell.x and cell.y == testCell.y)
-					state = CellState::active;
-			}
-		}
-		*/
-		//startPoint = ImVec2(m_gridDimensions.x / 3, m_gridDimensions.y / 2);
-
 		std::string R_Pentomino =
-		"X..##.\n"
-		"..##..\n"
-		"...#..";
+			"X..##.\n"
+			"..##..\n"
+			"...#..";
 
-		auto testVector = ConvertToPattern(R_Pentomino);
-		for (auto& [cell, state] : m_cellMap)
-		{
-			for (auto& testCell : testVector)
-			{
-				// Sigh need to overload "==" for ImVec2...
-				if (cell.x == testCell.x and cell.y == testCell.y)
-					state = CellState::active;
-			}
-		}
+		auto testVector = StringPatternToCells(R_Pentomino);
+		cellTester(testVector);
 
 		break;
 	}
 	case Pattern::Glider_Gun:
 	{
+		std::string Glider_Gun =
+			"X.......................#...........\n"
+			"......................#.#...........\n"
+			"............##......##............##\n"
+			"...........#...#....##............##\n"
+			"##........#.....#...##..............\n"
+			"##........#...#.##....#.#...........\n"
+			"..........#.....#.......#...........\n"
+			"...........#...#....................\n"
+			"............##......................";
 
-		// Currently unimplemented as it'd take too long to hardcode this...
+		auto testVector = StringPatternToCells(Glider_Gun);
+		cellTester(testVector);
+
 		break;
 	}
 	case Pattern::Infinite_Growth:
 	{
-		startPoint = ImVec2(m_gridDimensions.x / 3, m_gridDimensions.y / 2);
-
-		ImVec2 cell_1 = ImVec2(startPoint.x + 1, startPoint.y);
-		ImVec2 cell_2 = ImVec2(startPoint.x + 2, startPoint.y);
-		ImVec2 cell_3 = ImVec2(startPoint.x + 3, startPoint.y);
-		ImVec2 cell_4 = ImVec2(startPoint.x + 4, startPoint.y);
-		ImVec2 cell_5 = ImVec2(startPoint.x + 5, startPoint.y);
-		ImVec2 cell_6 = ImVec2(startPoint.x + 6, startPoint.y);
-		ImVec2 cell_7 = ImVec2(startPoint.x + 7, startPoint.y);
-		ImVec2 cell_8 = ImVec2(startPoint.x + 8, startPoint.y);
-
-		ImVec2 cell_9 = ImVec2(startPoint.x + 10, startPoint.y);
-		ImVec2 cell_10 = ImVec2(startPoint.x + 11, startPoint.y);
-		ImVec2 cell_11 = ImVec2(startPoint.x + 12, startPoint.y);
-		ImVec2 cell_12 = ImVec2(startPoint.x + 13, startPoint.y);
-		ImVec2 cell_13 = ImVec2(startPoint.x + 14, startPoint.y);
-
-		ImVec2 cell_14 = ImVec2(startPoint.x + 18, startPoint.y);
-		ImVec2 cell_15 = ImVec2(startPoint.x + 19, startPoint.y);
-		ImVec2 cell_16 = ImVec2(startPoint.x + 20, startPoint.y);
-
-		ImVec2 cell_17 = ImVec2(startPoint.x + 27, startPoint.y);
-		ImVec2 cell_18 = ImVec2(startPoint.x + 28, startPoint.y);
-		ImVec2 cell_19 = ImVec2(startPoint.x + 29, startPoint.y);
-		ImVec2 cell_20 = ImVec2(startPoint.x + 30, startPoint.y);
-		ImVec2 cell_21 = ImVec2(startPoint.x + 31, startPoint.y);
-		ImVec2 cell_22 = ImVec2(startPoint.x + 32, startPoint.y);
-		ImVec2 cell_23 = ImVec2(startPoint.x + 33, startPoint.y);
-
-		ImVec2 cell_24 = ImVec2(startPoint.x + 35, startPoint.y);
-		ImVec2 cell_25 = ImVec2(startPoint.x + 36, startPoint.y);
-		ImVec2 cell_26 = ImVec2(startPoint.x + 37, startPoint.y);
-		ImVec2 cell_27 = ImVec2(startPoint.x + 38, startPoint.y);
-		ImVec2 cell_28 = ImVec2(startPoint.x + 39, startPoint.y);
-
-		std::vector<ImVec2> testVector = 
-		{ 
-		cell_1, cell_2, cell_3, cell_4, cell_5, cell_6, cell_7, cell_8, cell_9, cell_10,
-		cell_11, cell_12, cell_13, cell_14, cell_15, cell_16, cell_17, cell_18, cell_19, 
-		cell_20, cell_21, cell_22, cell_23, cell_24, cell_25, cell_26, cell_27, cell_28
-		};
-
-		for (auto& [cell, state] : m_cellMap)
-		{
-			for (auto& testCell : testVector)
-			{
-				// Sigh need to overload "==" for ImVec2...
-				if (cell.x == testCell.x and cell.y == testCell.y)
-					state = CellState::active;
-			}
-		}
+		std::string Infinite_Growth = "X########.#####...###......#######.#####";
+		
+		auto testVector = StringPatternToCells(Infinite_Growth);
+		cellTester(testVector);
 
 		break;
 	}
@@ -303,29 +248,23 @@ void GameOfLife::DrawCells() const
 	ImGuiIO& io = ImGui::GetIO();
 	ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
+	const ImVec2 origin = ImVec2(m_min_canvas_position.x + m_grid_scrolling.x, m_min_canvas_position.y + m_grid_scrolling.y);
+
+	draw_list->PushClipRect(m_min_canvas_position, m_max_canvas_position, true);
+	draw_list->AddRect(origin, ImVec2(origin.x + (m_gridDimensions.x * m_grid_steps), origin.y + (m_gridDimensions.y * m_grid_steps)), IM_COL32(200, 200, 200, 255));
+
 	for (const auto& [cell, state] : m_cellMap)
 	{
 		if (state == CellState::active)
 		{
-			const ImVec2 origin = ImVec2(m_min_canvas_position.x + m_grid_scrolling.x, m_min_canvas_position.y + m_grid_scrolling.y);
 			const ImVec2 cell_pos_i = ImVec2(origin.x + (cell.x * m_grid_steps), origin.y + (cell.y * m_grid_steps));
 			const ImVec2 cell_pos_f = ImVec2(cell_pos_i.x + m_grid_steps, cell_pos_i.y + m_grid_steps);
 
-			draw_list->PushClipRect(m_min_canvas_position, m_max_canvas_position, true);
-			draw_list->AddRectFilled(cell_pos_i, cell_pos_f, m_cell_colour_off);
-			draw_list->PopClipRect();
-		}
-		else
-		{
-			const ImVec2 origin = ImVec2(m_min_canvas_position.x + m_grid_scrolling.x, m_min_canvas_position.y + m_grid_scrolling.y);
-			const ImVec2 cell_pos_i = ImVec2(origin.x + (cell.x * m_grid_steps), origin.y + (cell.y * m_grid_steps));
-			const ImVec2 cell_pos_f = ImVec2(cell_pos_i.x + m_grid_steps, cell_pos_i.y + m_grid_steps);
-
-			draw_list->PushClipRect(m_min_canvas_position, m_max_canvas_position, true);
-			draw_list->AddRectFilled(cell_pos_i, cell_pos_f, m_cell_colour_on);
-			draw_list->PopClipRect();
+			draw_list->AddRectFilled(cell_pos_i, cell_pos_f, m_cell_colour_main);
 		}
 	}
+	
+	draw_list->PopClipRect();
 }
 
 void GameOfLife::GenerateGameOfLife()

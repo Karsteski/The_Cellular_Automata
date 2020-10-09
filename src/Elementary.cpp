@@ -150,21 +150,23 @@ void Elementary::DrawCells() const
 {
 	ImGuiIO& io = ImGui::GetIO();
 	ImDrawList* draw_list = ImGui::GetWindowDrawList();
+	
+	draw_list->PushClipRect(m_min_canvas_position, m_max_canvas_position, true);
+
+	const ImVec2 origin = ImVec2(m_min_canvas_position.x + m_grid_scrolling.x, m_min_canvas_position.y + m_grid_scrolling.y);			
+	draw_list->AddRect(origin, ImVec2(origin.x + (m_numberOfCellsPerGeneration * m_grid_steps), origin.y + (m_numberOfGenerations * m_grid_steps)), IM_COL32(200, 200, 200, 255));
 
 	for (const auto& [cell, state] : m_cellMap)
 	{
 		if (state == CellState::active)
 		{
-
-			const ImVec2 origin = ImVec2(m_min_canvas_position.x + m_grid_scrolling.x, m_min_canvas_position.y + m_grid_scrolling.y);
 			const ImVec2 cell_pos_i = ImVec2(origin.x + (cell.x * m_grid_steps), origin.y + (cell.y * m_grid_steps));
 			const ImVec2 cell_pos_f = ImVec2(cell_pos_i.x + m_grid_steps, cell_pos_i.y + m_grid_steps);
-
-			draw_list->PushClipRect(m_min_canvas_position, m_max_canvas_position, true);
 			draw_list->AddRectFilled(cell_pos_i, cell_pos_f, m_cell_colour_main);
-			draw_list->PopClipRect();
 		}
 	}
+	
+	draw_list->PopClipRect();
 }
 
 unsigned int Elementary::GetNumberOfGenerations()

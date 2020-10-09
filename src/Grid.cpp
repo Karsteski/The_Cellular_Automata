@@ -4,9 +4,7 @@
 
 Grid::Grid() : m_enable_grid(true), m_canvas_size(100.0f, 100.0f), m_min_canvas_position(0.0f, 0.0f), m_max_canvas_position(100.0f, 100.0f), m_grid_scrolling(ImVec2(0.0f, 0.0f)),
 m_grid_steps(10.0f),
-m_cell_colour_main(IM_COL32(100.0f, 100.0f, 100.0f, 255.0f)),
-m_cell_colour_off(IM_COL32(255.0f, 255.0f, 255.0f, 255.0f)),
-m_cell_colour_on(IM_COL32(25.0f, 25.0f, 25.0f, 255.0f)) {};
+m_cell_colour_main(IM_COL32(255.0f, 255.0f, 255.0f, 255.0f)) {};
 
 // Probably want to convert this to a smart pointer...
 void Grid::EnableGrid(bool input)
@@ -55,7 +53,7 @@ void Grid::DrawGrid()
 	m_min_canvas_position = ImGui::GetCursorScreenPos();
 	m_canvas_size = ImGui::GetContentRegionAvail();
 
-	// Resize canvas
+	// Resize canvas.
 	if (m_canvas_size.x < 50.0f) m_canvas_size.x = 50.0f;
 	if (m_canvas_size.y < 50.0f) m_canvas_size.y = 50.0f;
 	m_max_canvas_position = ImVec2(m_min_canvas_position.x + m_canvas_size.x, m_min_canvas_position.y + m_canvas_size.y);
@@ -94,6 +92,7 @@ void Grid::DrawGrid()
 		{
 			draw_list->AddLine(ImVec2(m_min_canvas_position.x, m_min_canvas_position.y + y), ImVec2(m_max_canvas_position.x, m_min_canvas_position.y + y), IM_COL32(200, 200, 200, 40));
 		}
+
 		draw_list->PopClipRect();
 	}
 }
@@ -119,7 +118,6 @@ void Grid::DrawCells(std::vector<ImVec2>& cells_to_draw) const
 			cell.y = std::trunc(cell.y);
 		}
 
-		// Note that std::fmod is simply moving the grid by a factor of the grid_steps.
 		const ImVec2 origin = ImVec2(m_min_canvas_position.x + m_grid_scrolling.x, m_min_canvas_position.y + m_grid_scrolling.y);
 		ImVec2 cell_pos_i = ImVec2(origin.x + (cell.x * m_grid_steps), origin.y + (cell.y * m_grid_steps));
 		ImVec2 cell_pos_f = ImVec2(cell_pos_i.x + m_grid_steps, cell_pos_i.y + m_grid_steps);
