@@ -6,6 +6,8 @@
 class Grid
 {
 public:
+
+	std::vector <ImVec2> m_cells_to_draw;
 	
 	Grid();
 
@@ -23,12 +25,13 @@ public:
 	void SetMainCellColour(ImColor);
 
 	void DrawGrid();
-	virtual void DrawCells(std::vector<ImVec2>&) const;
+	virtual void DrawCells();
 
 	virtual ~Grid();
 
 private:
 
+	
 	bool m_enable_grid;
 	ImVec2 m_canvas_size;
 	ImVec2 m_min_canvas_position;

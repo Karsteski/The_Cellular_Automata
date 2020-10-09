@@ -2,7 +2,7 @@
 #include <utility>
 #include <cmath>
 
-Grid::Grid() : m_enable_grid(true), m_canvas_size(100.0f, 100.0f), m_min_canvas_position(0.0f, 0.0f), m_max_canvas_position(100.0f, 100.0f), m_grid_scrolling(ImVec2(0.0f, 0.0f)),
+Grid::Grid() : m_cells_to_draw(), m_enable_grid(true), m_canvas_size(100.0f, 100.0f), m_min_canvas_position(0.0f, 0.0f), m_max_canvas_position(100.0f, 100.0f), m_grid_scrolling(ImVec2(0.0f, 0.0f)),
 m_grid_steps(10.0f),
 m_cell_colour_main(IM_COL32(255.0f, 255.0f, 255.0f, 255.0f)) {};
 
@@ -98,24 +98,18 @@ void Grid::DrawGrid()
 }
 
 // Only use positive integers or the negative sign will be dropped, as well as any decimals.
-void Grid::DrawCells(std::vector<ImVec2>& cells_to_draw) const
+void Grid::DrawCells()
 {
 	ImGuiIO& io = ImGui::GetIO();
 	ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
-	for (auto cell : cells_to_draw)
+	for (auto cell : m_cells_to_draw)
 	{
 		// To remove negative numbers, which don't show up on the grid.
 		if (cell.x < 0 or cell.y < 0)
 		{
 			cell.x = std::abs(cell.x);
 			cell.y = std::abs(cell.y);
-		}
-
-		// To remove decimals.
-		{
-			cell.x = std::trunc(cell.x);
-			cell.y = std::trunc(cell.y);
 		}
 
 		const ImVec2 origin = ImVec2(m_min_canvas_position.x + m_grid_scrolling.x, m_min_canvas_position.y + m_grid_scrolling.y);

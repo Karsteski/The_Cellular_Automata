@@ -6,21 +6,37 @@
 // Default ruleset is rule 90. (https://mathworld.wolfram.com/ElementaryCellularAutomaton.html)
 Elementary::Elementary() : m_cellMap(), m_ruleset("01011010"), m_numberOfCellsPerGeneration(200), m_numberOfGenerations(500) { };
 
-std::map<ImVec2, CellState>& Elementary::GetCellMap()
+const std::map<ImVec2, CellState>& Elementary::GetCellMap() const
 {
 	return m_cellMap;
 }
 
-void Elementary::GenerateCells(CellState state = CellState::inactive)
+const int Elementary::GetNumberOfGenerations() const
 {
-	for (unsigned int generation = 0; generation < m_numberOfGenerations; ++generation)
+	return m_numberOfGenerations;
+}
+
+const CellState Elementary::GetCellState(ImVec2 cell) const
+{
+	if (m_cellMap.find(cell) != m_cellMap.end())
 	{
-		for (unsigned int position = 0; position < m_numberOfCellsPerGeneration; ++position)
-		{
-			ImVec2 cell = ImVec2(position, generation);
-			m_cellMap.insert(std::make_pair(cell, state));
-		}
-	}	
+		auto state = m_cellMap.at(cell);
+		return state;
+	}
+	else
+	{
+		return CellState::inactive;
+	}
+}
+
+std::bitset<8>& Elementary::SetRuleset()
+{
+	return m_ruleset;
+}
+
+void Elementary::SetNumberOfGenerations(int input)
+{
+	m_numberOfGenerations = input;
 }
 
 bool Elementary::SetSingleCellState(ImVec2 cell, CellState state)
@@ -36,17 +52,16 @@ bool Elementary::SetSingleCellState(ImVec2 cell, CellState state)
 	}
 }
 
-CellState Elementary::GetCellState(ImVec2 cell)
+void Elementary::GenerateCells(CellState state = CellState::inactive)
 {
-	if (m_cellMap.find(cell) != m_cellMap.end())
+	for (unsigned int generation = 0; generation < m_numberOfGenerations; ++generation)
 	{
-		auto state = m_cellMap.at(cell);
-		return state;
-	}
-	else
-	{
-		return CellState::inactive;
-	}
+		for (unsigned int position = 0; position < m_numberOfCellsPerGeneration; ++position)
+		{
+			ImVec2 cell = ImVec2(position, generation);
+			m_cellMap.insert(std::make_pair(cell, state));
+		}
+	}	
 }
 
 void Elementary::SetAllCellStates()
@@ -146,7 +161,7 @@ void Elementary::SetAllCellStates()
 	}
 }
 	
-void Elementary::DrawCells() const
+void Elementary::DrawCells()
 {
 	ImGuiIO& io = ImGui::GetIO();
 	ImDrawList* draw_list = ImGui::GetWindowDrawList();
@@ -154,7 +169,7 @@ void Elementary::DrawCells() const
 	draw_list->PushClipRect(m_min_canvas_position, m_max_canvas_position, true);
 
 	const ImVec2 origin = ImVec2(m_min_canvas_position.x + m_grid_scrolling.x, m_min_canvas_position.y + m_grid_scrolling.y);			
-	draw_list->AddRect(origin, ImVec2(origin.x + (m_numberOfCellsPerGeneration * m_grid_steps), origin.y + (m_numberOfGenerations * m_grid_steps)), IM_COL32(200, 200, 200, 255));
+	draw_list->AddRect(origin, ImVec2(origin.x + (m_numberOfCellsPerGeneration * m_grid_steps), origin.y + (m_numberOfGenerations * m_grid_steps)), m_cell_colour_main);
 
 	for (const auto& [cell, state] : m_cellMap)
 	{
@@ -167,21 +182,6 @@ void Elementary::DrawCells() const
 	}
 	
 	draw_list->PopClipRect();
-}
-
-unsigned int Elementary::GetNumberOfGenerations()
-{
-	return m_numberOfGenerations;
-}
-
-void Elementary::SetNumberOfGenerations(unsigned int input)
-{
-	m_numberOfGenerations = input;
-}
-
-std::bitset<8>& Elementary::Ruleset()
-{
-	return m_ruleset;
 }
 
 void Elementary::GenerateElementaryAutomata()

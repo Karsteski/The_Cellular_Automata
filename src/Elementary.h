@@ -19,20 +19,19 @@ public:
 
 	Elementary();
 	
-	std::map<ImVec2, CellState>& GetCellMap();
-	unsigned int GetNumberOfGenerations();
-
-	CellState GetCellState(ImVec2);
-	void GenerateCells(CellState);
+	const std::map<ImVec2, CellState>& GetCellMap() const;
+	const int GetNumberOfGenerations() const;
+	const CellState GetCellState(ImVec2) const;
 	
+	std::bitset<8>& SetRuleset();
+	void SetNumberOfGenerations(int);
 	bool SetSingleCellState(ImVec2, CellState);
-	void SetNumberOfGenerations(unsigned int);
+	
+	void GenerateCells(CellState);
 	
 	void SetAllCellStates();
 
-	virtual void DrawCells() const;
-
-	std::bitset<8>& Ruleset();
+	virtual void DrawCells() override;
 
 	void GenerateElementaryAutomata();
 

@@ -181,8 +181,8 @@ int main(int, char**)
 
 					basic_grid.DrawGrid();
 
-					std::vector<ImVec2> basic_vec = { ImVec2(static_cast<float>(basic_rect_x), static_cast<float>(basic_rect_y)) };
-					basic_grid.DrawCells(basic_vec);
+					basic_grid.m_cells_to_draw = { ImVec2(static_cast<float>(basic_rect_x), static_cast<float>(basic_rect_y)) };
+					basic_grid.DrawCells();
 					ImGui::EndTabItem();
 					ImGui::EndTabBar();
 				}
@@ -193,7 +193,7 @@ int main(int, char**)
 			if (ImGui::BeginTabItem("Elementary Cellular Automata"))
 			{
 				static Elementary elementaryAutomata;
-				auto& ElementaryCellularAutomataRuleset = elementaryAutomata.Ruleset();
+				auto& ElementaryCellularAutomataRuleset = elementaryAutomata.SetRuleset();
 				
 				// Can't pass individual bits by reference, therefore the following repeated code is a necessary evil,
 				// unless a workaround is implemented to make a vector<bool> act like a regular STL container.
