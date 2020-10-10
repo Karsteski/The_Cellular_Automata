@@ -27,11 +27,17 @@ public:
 	void DrawGrid();
 	virtual void DrawCells();
 
-	virtual ~Grid();
+	// Following the Rule of 5. 
+	// No use for the special member functions, so they are simply deleted.
+	Grid(const Grid&) = delete;
+	Grid(Grid&&) = delete;
+	Grid& operator=(const Grid&) = delete;
+	Grid& operator=(Grid&&) = delete;
+
+	virtual ~Grid() = default;
 
 private:
 
-	
 	bool m_enable_grid;
 	ImVec2 m_canvas_size;
 	ImVec2 m_min_canvas_position;

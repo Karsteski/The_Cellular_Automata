@@ -94,7 +94,6 @@ int main(int, char**)
 
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
-	//ImGui::StyleColorsClassic();
 
 	// Setup Platform/Renderer bindings
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -167,9 +166,9 @@ int main(int, char**)
 				ImGui::InputInt("y-coordinate", &basic_rect_y);
 
 				ImGui::SetNextItemWidth(300);
-				static ImVec4 colour_picker = { 0.0f, 0.0f, 0.0f, 0.33f };
+				static ImVec4 colour_picker = { 1.0f, 1.0f, 1.0f, 1.0f };
 				ImGui::ColorEdit4("Cell Colour", &colour_picker.x);
-				basic_grid.SetMainCellColour((ImColor)colour_picker);
+				basic_grid.SetMainCellColour(static_cast<ImColor>(colour_picker));
 
 				ImGui::Separator();
 				
@@ -255,6 +254,10 @@ int main(int, char**)
 			if (ImGui::BeginTabItem("Game of Life"))
 			{
 				static GameOfLife ConwaysGameOfLife;
+
+				static bool GoLgridSwitch = false;
+				ImGui::Checkbox("Enable Grid", &GoLgridSwitch);
+				ConwaysGameOfLife.EnableGrid(GoLgridSwitch);
 
 				auto [width, height] = ConwaysGameOfLife.GetGameDimensions();
 				static int gameWidth = width;

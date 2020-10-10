@@ -1,9 +1,6 @@
 #include "Application.h"
 #include "Grid.h"
 
-
-
-
 void KSS::CallMenu()
 {	
 	// WIP

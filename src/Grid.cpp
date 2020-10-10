@@ -121,5 +121,3 @@ void Grid::DrawCells()
 		draw_list->PopClipRect();
 	}
 }
-
-Grid::~Grid() = default;

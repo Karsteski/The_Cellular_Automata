@@ -33,11 +33,9 @@ public:
 
 	void SetAllCellStates();
 
-	virtual void DrawCells() const;
+	void DrawCells() override;
 
 	void GenerateGameOfLife();
-
-	virtual ~GameOfLife();
 
 private:
 

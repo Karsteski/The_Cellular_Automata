@@ -31,11 +31,9 @@ public:
 	
 	void SetAllCellStates();
 
-	virtual void DrawCells() override;
+	void DrawCells() override;
 
 	void GenerateElementaryAutomata();
-
-	virtual ~Elementary();
 
 private:
 

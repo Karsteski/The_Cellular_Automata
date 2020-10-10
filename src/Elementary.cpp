@@ -79,10 +79,10 @@ void Elementary::SetAllCellStates()
 			ImVec2 prev_cell_2 = ImVec2(cell.x - 1, cell.y - 1);
 
 			// Checks previous neighbour cells' states, which determines the current cell's state based on the rule bitset (m_ruleset).
-			CellState defaultState = CellState::inactive;
-			CellState& state_0 = (m_cellMap.find(prev_cell_0) != m_cellMap.end()) ? m_cellMap.at(prev_cell_0) : defaultState;
-			CellState& state_1 = (m_cellMap.find(prev_cell_1) != m_cellMap.end()) ? m_cellMap.at(prev_cell_1) : defaultState;
-			CellState& state_2 = (m_cellMap.find(prev_cell_2) != m_cellMap.end()) ? m_cellMap.at(prev_cell_2) : defaultState;
+			const CellState defaultState = CellState::inactive;
+			const CellState& state_0 = (m_cellMap.find(prev_cell_0) != m_cellMap.end()) ? m_cellMap.at(prev_cell_0) : defaultState;
+			const CellState& state_1 = (m_cellMap.find(prev_cell_1) != m_cellMap.end()) ? m_cellMap.at(prev_cell_1) : defaultState;
+			const CellState& state_2 = (m_cellMap.find(prev_cell_2) != m_cellMap.end()) ? m_cellMap.at(prev_cell_2) : defaultState;
 
 			if (state_0 == CellState::active) previousCells[0].flip();
 			if (state_1 == CellState::active) previousCells[1].flip();
@@ -92,14 +92,14 @@ void Elementary::SetAllCellStates()
 			auto neighbourCellsState = previousCells.to_string();
 
 			// This is the table that specifies a cell's state given its previous state, and the states of the cells to the left & right.
-			std::string rulePosition_0 = "111";
-			std::string rulePosition_1 = "110";
-			std::string rulePosition_2 = "101";
-			std::string rulePosition_3 = "100";
-			std::string rulePosition_4 = "011";
-			std::string rulePosition_5 = "010";
-			std::string rulePosition_6 = "001";
-			std::string rulePosition_7 = "000";
+			const std::string rulePosition_0 = "111";
+			const std::string rulePosition_1 = "110";
+			const std::string rulePosition_2 = "101";
+			const std::string rulePosition_3 = "100";
+			const std::string rulePosition_4 = "011";
+			const std::string rulePosition_5 = "010";
+			const std::string rulePosition_6 = "001";
+			const std::string rulePosition_7 = "000";
 
 			// Can't switch on a string, so they're mapped to ints instead.
 			const std::map <std::string, int> ruleMap =
@@ -187,9 +187,7 @@ void Elementary::DrawCells()
 void Elementary::GenerateElementaryAutomata()
 {
 	GenerateCells();
-	float startPoint = m_numberOfCellsPerGeneration / 2;
+	const int startPoint = m_numberOfCellsPerGeneration / 2;
 	SetSingleCellState(ImVec2(startPoint, 0), CellState::active);
 	SetAllCellStates();
 }
-
-Elementary::~Elementary() = default;

@@ -66,7 +66,7 @@ void GameOfLife::GeneratePattern(Pattern pattern)
 	GenerateEmptyCells();
 
 	// 'X' = starting point (0, 0), '#' = active cell, '.' = inactive cell.
-	const auto StringPatternToCells = [=](std::string inputString)
+	const auto StringPatternToCells = [&](const std::string inputString)
 	{
 		int gridRow = 0;
 		int gridColumn = 0;
@@ -90,15 +90,18 @@ void GameOfLife::GeneratePattern(Pattern pattern)
 		return cellsToWrite;
 	};
 
-	auto cellTester = [&](std::vector<ImVec2>& inputVector)
+	auto cellTester = [&](const std::vector<ImVec2>& inputVector)
 	{
 		for (auto& [cell, state] : m_cellMap)
 		{
 			for (auto& testCell : inputVector)
 			{
-				// Sigh need to overload "==" for ImVec2... or switch to std::pair.
-				if (cell.x == testCell.x and cell.y == testCell.y)
-					state = CellState::active;
+				if (m_cellMap.find(testCell) != m_cellMap.end())
+				{
+					// Sigh need to overload "==" for ImVec2... or switch to std::pair.
+					if (cell.x == testCell.x and cell.y == testCell.y)
+						state = CellState::active;
+				}
 			}
 		}
 	};
@@ -107,19 +110,19 @@ void GameOfLife::GeneratePattern(Pattern pattern)
 	{
 	case Pattern::R_Pentomino:
 	{
-		std::string R_Pentomino =
+		const std::string R_Pentomino =
 			"X..##.\n"
 			"..##..\n"
 			"...#..";
 
-		auto testVector = StringPatternToCells(R_Pentomino);
+		const auto testVector = StringPatternToCells(R_Pentomino);
 		cellTester(testVector);
 
 		break;
 	}
 	case Pattern::Glider_Gun:
 	{
-		std::string Glider_Gun =
+		const std::string Glider_Gun =
 			"X.......................#...........\n"
 			"......................#.#...........\n"
 			"............##......##............##\n"
@@ -130,16 +133,16 @@ void GameOfLife::GeneratePattern(Pattern pattern)
 			"...........#...#....................\n"
 			"............##......................";
 
-		auto testVector = StringPatternToCells(Glider_Gun);
+		const auto testVector = StringPatternToCells(Glider_Gun);
 		cellTester(testVector);
 
 		break;
 	}
 	case Pattern::Infinite_Growth:
 	{
-		std::string Infinite_Growth = "X########.#####...###......#######.#####";
+		const std::string Infinite_Growth = "X########.#####...###......#######.#####";
 		
-		auto testVector = StringPatternToCells(Infinite_Growth);
+		const auto testVector = StringPatternToCells(Infinite_Growth);
 		cellTester(testVector);
 
 		break;
@@ -164,7 +167,7 @@ CellState GameOfLife::GetCellState(ImVec2 cell)
 {
 	if (m_cellMap.find(cell) != m_cellMap.end())
 	{
-		auto state = m_cellMap.at(cell);
+		const auto state = m_cellMap.at(cell);
 		return state;
 	}
 	else
@@ -243,7 +246,7 @@ void GameOfLife::SetAllCellStates()
 	m_cellMap = cellMapBuffer;
 }
 
-void GameOfLife::DrawCells() const
+void GameOfLife::DrawCells()
 {
 	ImGuiIO& io = ImGui::GetIO();
 	ImDrawList* draw_list = ImGui::GetWindowDrawList();
@@ -271,5 +274,3 @@ void GameOfLife::GenerateGameOfLife()
 {
 	SetAllCellStates();
 }
-
-GameOfLife::~GameOfLife() = default;
