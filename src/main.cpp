@@ -129,6 +129,8 @@ int main(int, char**)
 		// Application Flags
 		static bool show_demo_window = false;
 		static bool show_basic_drawing_grid = false;
+		static bool show_about_window = false;
+		static bool show_rules_window = false;
 
 		{
 			{
@@ -141,14 +143,11 @@ int main(int, char**)
 					ImGui::EndMenu();
 				}
 
-				if (ImGui::BeginMenu("Rules"))
-				{
-
-				}
-
 				if (ImGui::BeginMenu("About"))
 				{
-
+					ImGui::MenuItem("Rules", NULL, &show_rules_window);
+					ImGui::MenuItem("About...", NULL, &show_about_window);	
+					ImGui::EndMenu();
 				}
 
 				{
@@ -164,10 +163,54 @@ int main(int, char**)
 					ImGui::ShowDemoWindow(&show_demo_window);
 				}
 
+				if (show_rules_window)
+				{
+					ImGui::Begin("Rules", &show_rules_window, ImGuiWindowFlags_AlwaysAutoResize);
+
+					ImGui::Text("John Conway's Game of Life:");
+					const std::string gameOfLifeRules =
+						"The universe of the Game of Life is an infinite, two-dimensional orthogonal grid of square cells, each of which is in one of two possible states, alive or dead.\n"
+						"Every cell interacts with its eight neighbours, which are the cells that are horizontally, vertically, or diagonally adjacent.\n"
+						"At each step in time, the following transitions occur:\n"
+						"1. Any live cell with fewer than two live neighbours dies, as if by underpopulation.\n"
+						"2. Any live cell with two or three live neighbours lives on to the next generation.\n"
+						"3. Any live cell with more than three live neighbours dies, as if by overpopulation.\n"
+						"4. Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.\n";
+					ImGui::Text(gameOfLifeRules.c_str());
+
+					ImGui::Separator();
+
+					ImGui::Text("Elementary Cellular Automata:");
+					const std::string elementaryCellularAutomataRules =
+						"The simplest class of one-dimensional cellular automata.\n"
+						"Elementary cellular automata have two possible values for each cell (0 or 1), and rules that depend only on previous neighbor values.\n"
+						"As a result, the evolution of an elementary cellular automaton can completely be described by a table specifying the state a given cell will have in the next generation.\n"
+						"These states are based on the value of the cell itself, and the values of the cells to the left and right.\n"
+						"Since there are 2^3 = 8 possible binary states for the neighbour cells, there are a total of 2^8 = 256 elementary cellular automata, indexted by an 8-bit binary number.\n"
+						"One such example is the default example given in this program, known as rule 90: 01011010.\n"
+						"- Stephen Wolfram - Wolfram MathWorld (https://mathworld.wolfram.com/ElementaryCellularAutomaton.html)"
+						"";
+					ImGui::Text(elementaryCellularAutomataRules.c_str());
+
+					ImGui::End();
+				}
+
+				if (show_about_window)
+				{
+					ImGui::Begin("About this program", &show_about_window, ImGuiWindowFlags_AlwaysAutoResize);
+
+					const std::string aboutText =
+						"Developed by Kareem Skinner - (https://github.com/KareemSkinner/The_Cellular_Automata).\n"
+						"This program generates elementary cellular automata and Conway's Game of Life.\n"
+						"Inspired by Stephen Wolfram's book - 'A New Kind of Science'.\n"
+						"Please enjoy :)\n";
+
+					ImGui::Text(aboutText.c_str());
+					ImGui::End();
+				}
+
 				ImGui::EndMenuBar();
 			}
-
-			
 
 			ImGui::BeginTabBar("Main Tab");
 

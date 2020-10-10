@@ -27,9 +27,9 @@ std::map<ImVec2, CellState>& GameOfLife::GetCellMap()
 void GameOfLife::GenerateEmptyCells()
 {
 	m_cellMap.clear();
-	for (unsigned int x = 0; x < m_gridDimensions.x; ++x)
+	for (int x = 0; x < m_gridDimensions.x; ++x)
 	{
-		for (unsigned int y = 0; y < m_gridDimensions.y; ++y)
+		for (int y = 0; y < m_gridDimensions.y; ++y)
 		{
 			ImVec2 cell = ImVec2(x, y);
 			CellState state = CellState::inactive;
@@ -44,9 +44,9 @@ void GameOfLife::GenerateRandomCells()
 	// Time returns # of seconds since Jan 1st, 1970, making rand() seem truly random unless called within the same second.
 	std::srand(static_cast<int>(time(0)));
 
-	for (unsigned int x = 0; x < m_gridDimensions.x; ++x)
+	for (int x = 0; x < m_gridDimensions.x; ++x)
 	{
-		for (unsigned int y = 0; y < m_gridDimensions.y; ++y)
+		for (int y = 0; y < m_gridDimensions.y; ++y)
 		{
 			ImVec2 cell = ImVec2(x, y);
 			CellState state;
@@ -66,7 +66,7 @@ void GameOfLife::GeneratePattern(Pattern pattern)
 	GenerateEmptyCells();
 
 	// 'X' = starting point (0, 0), '#' = active cell, '.' = inactive cell.
-	const auto StringPatternToCells = [&](const std::string inputString)
+	const auto StringPatternToCells = [&](const std::string& inputString)
 	{
 		int gridRow = 0;
 		int gridColumn = 0;
@@ -210,7 +210,7 @@ void GameOfLife::SetAllCellStates()
 		CellState& state_6 = (m_cellMap.find(prev_cell_6) != m_cellMap.end()) ? m_cellMap.at(prev_cell_6) : defaultState;
 		CellState& state_7 = (m_cellMap.find(prev_cell_7) != m_cellMap.end()) ? m_cellMap.at(prev_cell_7) : defaultState;
 
-		unsigned int numberOfActiveNeighbours = 0;
+		int numberOfActiveNeighbours = 0;
 		if (state_0 == CellState::active) ++numberOfActiveNeighbours;
 		if (state_1 == CellState::active) ++numberOfActiveNeighbours;
 		if (state_2 == CellState::active) ++numberOfActiveNeighbours;
