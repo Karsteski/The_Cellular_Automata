@@ -20,10 +20,12 @@ public:
 	Elementary();
 	
 	const std::map<ImVec2, CellState>& GetCellMap() const;
+	const int GetNumberOfCellsPerGeneration() const;
 	const int GetNumberOfGenerations() const;
 	const CellState GetCellState(ImVec2) const;
 	
 	std::bitset<8>& SetRuleset();
+	void SetNumberOfCellsPerGeneration(int);	
 	void SetNumberOfGenerations(int);
 	bool SetSingleCellState(ImVec2, CellState);
 	
@@ -39,9 +41,8 @@ private:
 
 	std::map<ImVec2, CellState> m_cellMap;
 	std::bitset<8> m_ruleset;
-	
+
 	int m_numberOfCellsPerGeneration;
 	int m_numberOfGenerations;
-
 };
 

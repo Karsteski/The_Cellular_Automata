@@ -8,6 +8,10 @@ const std::map<ImVec2, CellState>& Elementary::GetCellMap() const
 	return m_cellMap;
 }
 
+const int Elementary::GetNumberOfCellsPerGeneration() const
+{
+	return m_numberOfCellsPerGeneration;
+}
 const int Elementary::GetNumberOfGenerations() const
 {
 	return m_numberOfGenerations;
@@ -31,9 +35,16 @@ std::bitset<8>& Elementary::SetRuleset()
 	return m_ruleset;
 }
 
+void Elementary::SetNumberOfCellsPerGeneration(int input)
+{
+	if (input > 0)
+		m_numberOfCellsPerGeneration = input;
+}
+
 void Elementary::SetNumberOfGenerations(int input)
 {
-	m_numberOfGenerations = input;
+	if (input > 0)
+		m_numberOfGenerations = input;
 }
 
 bool Elementary::SetSingleCellState(ImVec2 cell, CellState state)

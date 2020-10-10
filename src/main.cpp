@@ -216,14 +216,14 @@ int main(int, char**)
 
 			if(show_basic_drawing_grid)
 			{
-				if (ImGui::BeginTabItem("Basic Drawing Grid"))
+				if (ImGui::Begin("Basic Grid", &show_basic_drawing_grid))
 				{
 					static Grid basic_grid;
 					static bool gridSwitch = true;
 					ImGui::Checkbox("Enable Grid", &gridSwitch);
 					basic_grid.EnableGrid(gridSwitch);
 
-					static int gridSteps = 10;
+					static int gridSteps = 40;
 					ImGui::SetNextItemWidth(100);
 					ImGui::SliderInt("Grid Step Size", &gridSteps, 1, 100);
 					basic_grid.SetGridSteps(gridSteps);
@@ -237,7 +237,7 @@ int main(int, char**)
 					ImGui::InputInt("y-coordinate", &basic_rect_y);
 
 					ImGui::SetNextItemWidth(300);
-					static ImVec4 colour_picker = { 1.0f, 1.0f, 1.0f, 1.0f };
+					static ImVec4 colour_picker = { 1.0f, 0.0f, 0.0f, 1.0f };
 					ImGui::ColorEdit4("Cell Colour", &colour_picker.x);
 					basic_grid.SetMainCellColour(static_cast<ImColor>(colour_picker));
 
@@ -257,7 +257,7 @@ int main(int, char**)
 						ImGui::EndTabBar();
 					}
 
-					ImGui::EndTabItem();
+					ImGui::End();
 				}
 			}
 			
@@ -270,13 +270,16 @@ int main(int, char**)
 				ConwaysGameOfLife.EnableGrid(GoLgridSwitch);
 
 				auto [width, height] = ConwaysGameOfLife.GetGameDimensions();
-				static int gameWidth = width;
-				static int gameHeight = height;
+				static float gameWidth = width;
+				static float gameHeight = height;
+
+				if (gameWidth < 0) gameWidth = 0;
+				if (gameHeight < 0) gameHeight = 0;
 
 				ImGui::SetNextItemWidth(100);
-				ImGui::InputInt("Game Width", &gameWidth);
+				ImGui::InputFloat("Game Width", &gameWidth, 1.0f, 10.0f, "%.0f");
 				ImGui::SameLine(); ImGui::SetNextItemWidth(100);
-				ImGui::InputInt("Game Height", &gameHeight);
+				ImGui::InputFloat("Game Height", &gameHeight, 1.0f, 10.0f, "%.0f");
 
 				ConwaysGameOfLife.SetGameDimensions(ImVec2(gameWidth, gameHeight));
 
@@ -327,6 +330,20 @@ int main(int, char**)
 			{
 				static Elementary elementaryAutomata;
 				auto& ElementaryCellularAutomataRuleset = elementaryAutomata.SetRuleset();
+
+				static int nCellsPerGeneration = elementaryAutomata.GetNumberOfCellsPerGeneration();
+				static int nGenerations = elementaryAutomata.GetNumberOfGenerations();
+
+				if (nCellsPerGeneration < 0) nCellsPerGeneration = 0;
+				if (nGenerations < 0) nGenerations = 0;
+
+				ImGui::SetNextItemWidth(100);
+				ImGui::InputInt("Cells Per Generation", &nCellsPerGeneration);
+				ImGui::SameLine(); ImGui::SetNextItemWidth(100);
+				ImGui::InputInt("Number of Generations", &nGenerations);
+
+				elementaryAutomata.SetNumberOfCellsPerGeneration(nCellsPerGeneration);
+				elementaryAutomata.SetNumberOfGenerations(nGenerations);
 
 				// Can't pass individual bits by reference, therefore the following repeated code is a necessary evil,
 				// unless a workaround is implemented to make a vector<bool> act like a regular STL container.
