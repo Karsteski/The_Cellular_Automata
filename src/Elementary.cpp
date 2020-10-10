@@ -1,8 +1,5 @@
 #include "Elementary.h"
 
-#include <iostream>
-#include <algorithm>
-
 // Default ruleset is rule 90. (https://mathworld.wolfram.com/ElementaryCellularAutomaton.html)
 Elementary::Elementary() : m_cellMap(), m_ruleset("01011010"), m_numberOfCellsPerGeneration(200), m_numberOfGenerations(500) { };
 
@@ -54,11 +51,13 @@ bool Elementary::SetSingleCellState(ImVec2 cell, CellState state)
 
 void Elementary::GenerateCells(CellState state = CellState::inactive)
 {
-	for (unsigned int generation = 0; generation < m_numberOfGenerations; ++generation)
+	m_cellMap.clear();
+
+	for (int generation = 0; generation < m_numberOfGenerations; ++generation)
 	{
-		for (unsigned int position = 0; position < m_numberOfCellsPerGeneration; ++position)
+		for (int position = 0; position < m_numberOfCellsPerGeneration; ++position)
 		{
-			ImVec2 cell = ImVec2(position, generation);
+			ImVec2 cell = ImVec2(static_cast<float>(position), static_cast<float>(generation));
 			m_cellMap.insert(std::make_pair(cell, state));
 		}
 	}	
@@ -187,7 +186,7 @@ void Elementary::DrawCells()
 void Elementary::GenerateElementaryAutomata()
 {
 	GenerateCells();
-	const int startPoint = m_numberOfCellsPerGeneration / 2;
+	const float startPoint = static_cast<float>(m_numberOfCellsPerGeneration / 2);
 	SetSingleCellState(ImVec2(startPoint, 0), CellState::active);
 	SetAllCellStates();
 }

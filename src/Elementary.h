@@ -8,7 +8,7 @@
 #include "Grid.h"
 #include "imgui.h"
 
-#include "STL_Extensions.h"
+#include "Extensions.h"
 
 enum class CellState : bool { inactive = false, active = true };
 
@@ -40,8 +40,8 @@ private:
 	std::map<ImVec2, CellState> m_cellMap;
 	std::bitset<8> m_ruleset;
 	
-	unsigned int m_numberOfCellsPerGeneration;
-	unsigned int m_numberOfGenerations;
+	int m_numberOfCellsPerGeneration;
+	int m_numberOfGenerations;
 
 };
 

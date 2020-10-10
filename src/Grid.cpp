@@ -3,7 +3,7 @@
 #include <cmath>
 
 Grid::Grid() : m_cells_to_draw(), m_enable_grid(true), m_canvas_size(100.0f, 100.0f), m_min_canvas_position(0.0f, 0.0f), m_max_canvas_position(100.0f, 100.0f), m_grid_scrolling(ImVec2(0.0f, 0.0f)),
-m_grid_steps(10.0f),
+m_grid_steps(10),
 m_cell_colour_main(IM_COL32(255.0f, 255.0f, 255.0f, 255.0f)) {};
 
 // Probably want to convert this to a smart pointer...
@@ -32,15 +32,18 @@ ImColor Grid::GetCellMainCellColour()
 	return m_cell_colour_main;
 }
 
-float Grid::GetGridSteps() const
+int Grid::GetGridSteps() const
 {
 	return m_grid_steps;
 }
 
 // Only use positive integers or the negative sign will be dropped, as well as any decimals.
-void Grid::SetGridSteps(unsigned int gridSteps)
+void Grid::SetGridSteps(int gridSteps)
 {
-	m_grid_steps = gridSteps;
+	if (gridSteps > 0)
+	{
+		m_grid_steps = gridSteps;
+	}
 }
 
 void Grid::SetMainCellColour(ImColor colour)

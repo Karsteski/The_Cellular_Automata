@@ -1,6 +1,6 @@
 #include "GameOfLife.h"
-#include <iostream>
-#include <algorithm>
+
+#include <cmath>
 #include <ctime>
 
 GameOfLife::GameOfLife() : m_cellMap(), m_gridDimensions(150.0f, 150.0f) { };
@@ -273,4 +273,6 @@ void GameOfLife::DrawCells()
 void GameOfLife::GenerateGameOfLife()
 {
 	SetAllCellStates();
+	DrawGrid();
+	DrawCells();
 }

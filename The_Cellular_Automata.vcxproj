@@ -187,7 +187,7 @@
     <ClInclude Include="src\imgui\imstb_textedit.h" />
     <ClInclude Include="src\imgui\imstb_truetype.h" />
     <ClInclude Include="src\imgui\misc\cpp\imgui_stdlib.h" />
-    <ClInclude Include="src\STL_Extensions.h" />
+    <ClInclude Include="src\Extensions.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

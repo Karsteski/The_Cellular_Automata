@@ -1,5 +1,9 @@
+/*
+* Developed by Kareem Skinner - (https://github.com/KareemSkinner/The_Cellular_Automata)
+* This program generates elementary cellular automata and Conway's Game of Life.
+* Inspired by Stephen Wolfram's book - "A New Kind of Science"
+*/
 
-#include <iostream>
 #include <vector>
 #include <chrono>
 #include <thread>
@@ -100,7 +104,7 @@ int main(int, char**)
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
 	// Window state
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+	const ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -124,18 +128,37 @@ int main(int, char**)
 
 		// Application Flags
 		static bool show_demo_window = false;
+		static bool show_basic_drawing_grid = false;
 
 		{
 			{
 				ImGui::BeginMenuBar();
 
-				//Far more menu items to add.
 				if (ImGui::BeginMenu("Menu"))
 				{
 					ImGui::MenuItem("Show ImGui Demo Window", NULL, &show_demo_window);
+					ImGui::MenuItem("Show Basic Drawing Grid", NULL, &show_basic_drawing_grid);
 					ImGui::EndMenu();
 				}
 
+				if (ImGui::BeginMenu("Rules"))
+				{
+
+				}
+
+				if (ImGui::BeginMenu("About"))
+				{
+
+				}
+
+				{
+					// Metrics
+					ImGui::Separator();
+					ImGui::Text("Dear ImGui Version: %s", ImGui::GetVersion());
+					ImGui::SameLine();
+					ImGui::Text("Framerate = %.1f FPS", io.Framerate);
+				}
+				
 				if (show_demo_window)
 				{
 					ImGui::ShowDemoWindow(&show_demo_window);
@@ -144,111 +167,55 @@ int main(int, char**)
 				ImGui::EndMenuBar();
 			}
 
+			
+
 			ImGui::BeginTabBar("Main Tab");
-			if (ImGui::BeginTabItem("Basic Drawing Grid"))
+
+			if(show_basic_drawing_grid)
 			{
-				static Grid basic_grid;
-				static bool gridSwitch = true;
-				ImGui::Checkbox("Enable Grid", &gridSwitch);
-				basic_grid.EnableGrid(gridSwitch);
-
-				static int gridSteps = 10;
-				ImGui::SetNextItemWidth(100);
-				ImGui::SliderInt("Grid Step Size", &gridSteps, 1, 100);
-				basic_grid.SetGridSteps(gridSteps);
-
-				static int basic_rect_x = 0;
-				static int basic_rect_y = 0;
-
-				ImGui::SetNextItemWidth(100);
-				ImGui::InputInt("x-coordinate", &basic_rect_x);
-				ImGui::SameLine(); ImGui::SetNextItemWidth(100);
-				ImGui::InputInt("y-coordinate", &basic_rect_y);
-
-				ImGui::SetNextItemWidth(300);
-				static ImVec4 colour_picker = { 1.0f, 1.0f, 1.0f, 1.0f };
-				ImGui::ColorEdit4("Cell Colour", &colour_picker.x);
-				basic_grid.SetMainCellColour(static_cast<ImColor>(colour_picker));
-
-				ImGui::Separator();
-				
+				if (ImGui::BeginTabItem("Basic Drawing Grid"))
 				{
-					ImGui::BeginTabBar("Grid Tab");
-					ImGui::BeginTabItem("Grid");
-					if (basic_rect_x < 0) basic_rect_x = 0;
-					if (basic_rect_y < 0) basic_rect_y = 0;
+					static Grid basic_grid;
+					static bool gridSwitch = true;
+					ImGui::Checkbox("Enable Grid", &gridSwitch);
+					basic_grid.EnableGrid(gridSwitch);
 
-					basic_grid.DrawGrid();
+					static int gridSteps = 10;
+					ImGui::SetNextItemWidth(100);
+					ImGui::SliderInt("Grid Step Size", &gridSteps, 1, 100);
+					basic_grid.SetGridSteps(gridSteps);
 
-					basic_grid.m_cells_to_draw = { ImVec2(static_cast<float>(basic_rect_x), static_cast<float>(basic_rect_y)) };
-					basic_grid.DrawCells();
+					static int basic_rect_x = 0;
+					static int basic_rect_y = 0;
+
+					ImGui::SetNextItemWidth(100);
+					ImGui::InputInt("x-coordinate", &basic_rect_x);
+					ImGui::SameLine(); ImGui::SetNextItemWidth(100);
+					ImGui::InputInt("y-coordinate", &basic_rect_y);
+
+					ImGui::SetNextItemWidth(300);
+					static ImVec4 colour_picker = { 1.0f, 1.0f, 1.0f, 1.0f };
+					ImGui::ColorEdit4("Cell Colour", &colour_picker.x);
+					basic_grid.SetMainCellColour(static_cast<ImColor>(colour_picker));
+
+					ImGui::Separator();
+
+					{
+						ImGui::BeginTabBar("Grid Tab");
+						ImGui::BeginTabItem("Grid");
+						if (basic_rect_x < 0) basic_rect_x = 0;
+						if (basic_rect_y < 0) basic_rect_y = 0;
+
+						basic_grid.DrawGrid();
+
+						basic_grid.m_cells_to_draw = { ImVec2(static_cast<float>(basic_rect_x), static_cast<float>(basic_rect_y)) };
+						basic_grid.DrawCells();
+						ImGui::EndTabItem();
+						ImGui::EndTabBar();
+					}
+
 					ImGui::EndTabItem();
-					ImGui::EndTabBar();
 				}
-				ImGui::EndTabItem();
-			}
-
-			// Needs to be its own function
-			if (ImGui::BeginTabItem("Elementary Cellular Automata"))
-			{
-				static Elementary elementaryAutomata;
-				auto& ElementaryCellularAutomataRuleset = elementaryAutomata.SetRuleset();
-				
-				// Can't pass individual bits by reference, therefore the following repeated code is a necessary evil,
-				// unless a workaround is implemented to make a vector<bool> act like a regular STL container.
-				// Note vector<bool> is not individually addressable because of its special implementation. (https://en.cppreference.com/w/cpp/container/vector_bool)
-				// Not worth the trouble in my opinion...
-				static bool rulesetPosition_0 = ElementaryCellularAutomataRuleset[0];
-				static bool rulesetPosition_1 = ElementaryCellularAutomataRuleset[1];
-				static bool rulesetPosition_2 = ElementaryCellularAutomataRuleset[2];
-				static bool rulesetPosition_3 = ElementaryCellularAutomataRuleset[3];
-				static bool rulesetPosition_4 = ElementaryCellularAutomataRuleset[4];
-				static bool rulesetPosition_5 = ElementaryCellularAutomataRuleset[5];
-				static bool rulesetPosition_6 = ElementaryCellularAutomataRuleset[6];
-				static bool rulesetPosition_7 = ElementaryCellularAutomataRuleset[7];
-
-				ImGui::Checkbox("##0", &rulesetPosition_0); ImGui::SameLine();
-				ImGui::Checkbox("##1", &rulesetPosition_1); ImGui::SameLine();
-				ImGui::Checkbox("##2", &rulesetPosition_2); ImGui::SameLine();
-				ImGui::Checkbox("##3", &rulesetPosition_3); ImGui::SameLine();
-				ImGui::Checkbox("##4", &rulesetPosition_4); ImGui::SameLine();
-				ImGui::Checkbox("##5", &rulesetPosition_5); ImGui::SameLine();
-				ImGui::Checkbox("##6", &rulesetPosition_6); ImGui::SameLine();
-				ImGui::Checkbox("##7", &rulesetPosition_7); 
-
-				ElementaryCellularAutomataRuleset[0] = rulesetPosition_0;
-				ElementaryCellularAutomataRuleset[1] = rulesetPosition_1;
-				ElementaryCellularAutomataRuleset[2] = rulesetPosition_2;
-				ElementaryCellularAutomataRuleset[3] = rulesetPosition_3;
-				ElementaryCellularAutomataRuleset[4] = rulesetPosition_4;
-				ElementaryCellularAutomataRuleset[5] = rulesetPosition_5;
-				ElementaryCellularAutomataRuleset[6] = rulesetPosition_6;
-				ElementaryCellularAutomataRuleset[7] = rulesetPosition_7;
-				
-				// Bitset is read in reverse order
-				std::string rulesetReversedString = ElementaryCellularAutomataRuleset.to_string();
-				std::reverse(rulesetReversedString.begin(), rulesetReversedString.end());
-
-				std::string rulesetText = "Current Ruleset = " + rulesetReversedString;
-
-				ImGui::Text(rulesetText.c_str());
-				
-				if (ImGui::Button("Generate"))
-				{	
-					try
-					{
-						elementaryAutomata.GenerateElementaryAutomata();
-					}
-					catch (const std::out_of_range&)
-					{
-						ImGui::SetTooltip("There was an out of range error!");
-					}
-				}
-				
-				elementaryAutomata.DrawGrid();
-				elementaryAutomata.DrawCells();
-
-				ImGui::EndTabItem();
 			}
 			
 			if (ImGui::BeginTabItem("Game of Life"))
@@ -308,9 +275,62 @@ int main(int, char**)
 				ImGui::SliderInt("Zoom", &gridSteps, 1, 100);
 				ConwaysGameOfLife.SetGridSteps(gridSteps);
 
-				ConwaysGameOfLife.SetAllCellStates();
-				ConwaysGameOfLife.DrawGrid();
-				ConwaysGameOfLife.DrawCells();
+				ConwaysGameOfLife.GenerateGameOfLife();
+
+				ImGui::EndTabItem();
+			}
+
+			if (ImGui::BeginTabItem("Elementary Cellular Automata"))
+			{
+				static Elementary elementaryAutomata;
+				auto& ElementaryCellularAutomataRuleset = elementaryAutomata.SetRuleset();
+
+				// Can't pass individual bits by reference, therefore the following repeated code is a necessary evil,
+				// unless a workaround is implemented to make a vector<bool> act like a regular STL container.
+				// Note vector<bool> is not individually addressable because of its special implementation. (https://en.cppreference.com/w/cpp/container/vector_bool)
+				// Not worth the trouble in my opinion...
+				static bool rulesetPosition_0 = ElementaryCellularAutomataRuleset[0];
+				static bool rulesetPosition_1 = ElementaryCellularAutomataRuleset[1];
+				static bool rulesetPosition_2 = ElementaryCellularAutomataRuleset[2];
+				static bool rulesetPosition_3 = ElementaryCellularAutomataRuleset[3];
+				static bool rulesetPosition_4 = ElementaryCellularAutomataRuleset[4];
+				static bool rulesetPosition_5 = ElementaryCellularAutomataRuleset[5];
+				static bool rulesetPosition_6 = ElementaryCellularAutomataRuleset[6];
+				static bool rulesetPosition_7 = ElementaryCellularAutomataRuleset[7];
+
+				ImGui::Checkbox("##0", &rulesetPosition_0); ImGui::SameLine();
+				ImGui::Checkbox("##1", &rulesetPosition_1); ImGui::SameLine();
+				ImGui::Checkbox("##2", &rulesetPosition_2); ImGui::SameLine();
+				ImGui::Checkbox("##3", &rulesetPosition_3); ImGui::SameLine();
+				ImGui::Checkbox("##4", &rulesetPosition_4); ImGui::SameLine();
+				ImGui::Checkbox("##5", &rulesetPosition_5); ImGui::SameLine();
+				ImGui::Checkbox("##6", &rulesetPosition_6); ImGui::SameLine();
+				ImGui::Checkbox("##7", &rulesetPosition_7);
+
+				ElementaryCellularAutomataRuleset[0] = rulesetPosition_0;
+				ElementaryCellularAutomataRuleset[1] = rulesetPosition_1;
+				ElementaryCellularAutomataRuleset[2] = rulesetPosition_2;
+				ElementaryCellularAutomataRuleset[3] = rulesetPosition_3;
+				ElementaryCellularAutomataRuleset[4] = rulesetPosition_4;
+				ElementaryCellularAutomataRuleset[5] = rulesetPosition_5;
+				ElementaryCellularAutomataRuleset[6] = rulesetPosition_6;
+				ElementaryCellularAutomataRuleset[7] = rulesetPosition_7;
+
+				// Bitset is read in reverse order
+				std::string rulesetReversedString = ElementaryCellularAutomataRuleset.to_string();
+				std::reverse(rulesetReversedString.begin(), rulesetReversedString.end());
+
+				const std::string rulesetText = "Current Ruleset = " + rulesetReversedString;
+
+				ImGui::Text(rulesetText.c_str());
+
+				if (ImGui::Button("Generate"))
+				{
+					elementaryAutomata.GenerateElementaryAutomata();
+				}
+
+				elementaryAutomata.DrawGrid();
+				elementaryAutomata.DrawCells();
 
 				ImGui::EndTabItem();
 			}
