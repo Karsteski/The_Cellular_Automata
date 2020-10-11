@@ -62,7 +62,6 @@ void GameOfLife::GenerateRandomCells()
 	}
 }
 
-
 void GameOfLife::GeneratePattern(Pattern pattern)
 {
 	GenerateEmptyCells();

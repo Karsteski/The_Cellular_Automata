@@ -41,5 +41,4 @@ private:
 
 	std::map<ImVec2, CellState> m_cellMap;
 	ImVec2 m_gridDimensions;
-
 };

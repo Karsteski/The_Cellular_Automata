@@ -42,22 +42,12 @@ int main(int, char**)
 	if (!glfwInit())
 		return 1;
 
-	// Decide GL+GLSL versions
-#if __APPLE__
-	// GL 3.2 + GLSL 150
-	const char* glsl_version = "#version 150";
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
-#else
 	// GL 3.0 + GLSL 130
 	const char* glsl_version = "#version 130";
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
-#endif
 
 	// Create window with graphics context
 	GLFWwindow* window = glfwCreateWindow(1280, 720, "The Cellular Automata", NULL, NULL);
@@ -67,23 +57,7 @@ int main(int, char**)
 	glfwSwapInterval(1); // Enable vsync
 
 	// Initialize OpenGL loader
-#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
 	bool err = gl3wInit() != 0;
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
-	bool err = glewInit() != GLEW_OK;
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
-	bool err = gladLoadGL() == 0;
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD2)
-	bool err = gladLoadGL(glfwGetProcAddress) == 0; // glad2 recommend using the windowing library loader instead of the (optionally) bundled one.
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLBINDING2)
-	bool err = false;
-	glbinding::Binding::initialize();
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLBINDING3)
-	bool err = false;
-	glbinding::initialize([](const char* name) { return (glbinding::ProcAddress)glfwGetProcAddress(name); });
-#else
-	bool err = false; // If you use IMGUI_IMPL_OPENGL_LOADER_CUSTOM, your loader is likely to requires some form of initialization.
-#endif
 
 	if (err)
 	{
@@ -117,7 +91,7 @@ int main(int, char**)
 		// Generally may always pass all inputs to dear imgui, and hide them from the application based on those two flags.
 		glfwPollEvents();
 
-		// Feed inputs to imgui, starts a new frame
+		// Feed inputs to imgui, starts a new frame.
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame(); 
@@ -128,7 +102,7 @@ int main(int, char**)
 		ImGui::Begin("The Cellular Automata", 0, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse |
 		ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
-		// Application Flags
+		// Application Flags.
 		static bool show_demo_window = false;
 		static bool show_basic_drawing_grid = false;
 		static bool show_about_window = false;
@@ -153,7 +127,7 @@ int main(int, char**)
 				}
 
 				{
-					// Metrics
+					// Metrics.
 					ImGui::Separator();
 					ImGui::Text("Dear ImGui Version: %s", ImGui::GetVersion());
 					ImGui::SameLine();
@@ -386,7 +360,7 @@ int main(int, char**)
 				ElementaryCellularAutomataRuleset[6] = rulesetPosition_6;
 				ElementaryCellularAutomataRuleset[7] = rulesetPosition_7;
 
-				// Bitset is read in reverse order
+				// Bitset is read in reverse order.
 				std::string rulesetReversedString = ElementaryCellularAutomataRuleset.to_string();
 				std::reverse(rulesetReversedString.begin(), rulesetReversedString.end());
 
@@ -409,7 +383,7 @@ int main(int, char**)
 			ImGui::End();
 		}
 
-		// Rendering
+		// Rendering.
 		ImGui::Render();
 		int display_w, display_h;
 		glfwGetFramebufferSize(window, &display_w, &display_h);
@@ -419,10 +393,9 @@ int main(int, char**)
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		glfwSwapBuffers(window);
-
 	}
 
-	// Cleanup
+	// Cleanup.
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();

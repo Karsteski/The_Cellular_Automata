@@ -6,8 +6,7 @@
 #include <future>
 
 Grid::Grid() : m_cells_to_draw(), m_enable_grid(true), m_canvas_size(100.0f, 100.0f), m_min_canvas_position(0.0f, 0.0f), m_max_canvas_position(100.0f, 100.0f), m_grid_scrolling(ImVec2(0.0f, 0.0f)),
-m_grid_steps(10),
-m_cell_colour_main(IM_COL32(255.0f, 255.0f, 255.0f, 255.0f)) {};
+m_grid_steps(10), m_cell_colour_main(IM_COL32(255.0f, 255.0f, 255.0f, 255.0f)) {};
 
 // Probably want to convert this to a smart pointer...
 void Grid::EnableGrid(bool input)
