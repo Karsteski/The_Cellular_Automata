@@ -107,6 +107,8 @@ int main(int, char**)
 		static bool show_basic_drawing_grid = false;
 		static bool show_about_window = false;
 		static bool show_rules_window = false;
+		
+		static bool time_functions = false;
 
 		{
 			{
@@ -298,15 +300,22 @@ int main(int, char**)
 				ImGui::SliderInt("Zoom", &gridSteps, 1, 100);
 				ConwaysGameOfLife->SetGridSteps(gridSteps);
 
-				// Timing to check the effectiveness of multithreading.
-				auto timerStart = std::chrono::high_resolution_clock::now();
+				if (time_functions)
+				{
+					// Timing to check the effectiveness of multithreading.
+					auto timerStart = std::chrono::high_resolution_clock::now();
 
-				ConwaysGameOfLife->GenerateGameOfLife();
+					ConwaysGameOfLife->GenerateGameOfLife();
 
-				auto timerStop = std::chrono::high_resolution_clock::now();
-				auto timerDuration = timerStop - timerStart;
-				std::cout << "Game of Life Timing = " << timerDuration.count() / (1'000'000'000.0f) << " seconds" << std::endl;
-
+					auto timerStop = std::chrono::high_resolution_clock::now();
+					auto timerDuration = timerStop - timerStart;
+					std::cout << "Game of Life Timing = " << timerDuration.count() / (1'000'000'000.0f) << " seconds" << std::endl;
+				}
+				else
+				{
+					ConwaysGameOfLife->GenerateGameOfLife();
+				}
+				
 				ImGui::EndTabItem();
 			}
 
