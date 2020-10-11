@@ -1,7 +1,9 @@
 #include "GameOfLife.h"
 
 #include <cmath>
-#include <ctime>
+#include <chrono>
+#include <thread>
+#include <future>
 
 GameOfLife::GameOfLife() : m_cellMap(), m_gridDimensions(150.0f, 150.0f) { };
 

@@ -6,8 +6,9 @@
 
 #include <vector>
 #include <chrono>
-#include <thread>
 #include <memory>
+#include <iostream>
+#include <future>
 
 // Application 
 #include "Application.h"
@@ -323,14 +324,21 @@ int main(int, char**)
 				ImGui::SliderInt("Zoom", &gridSteps, 1, 100);
 				ConwaysGameOfLife->SetGridSteps(gridSteps);
 
+				// Timing to check the effectiveness of multithreading.
+				auto timerStart = std::chrono::high_resolution_clock::now();
+
 				ConwaysGameOfLife->GenerateGameOfLife();
+
+				auto timerStop = std::chrono::high_resolution_clock::now();
+				auto timerDuration = timerStop - timerStart;
+				std::cout << "Game of Life Timing = " << timerDuration.count() / (1'000'000'000.0f) << " seconds" << std::endl;
 
 				ImGui::EndTabItem();
 			}
 
 			if (ImGui::BeginTabItem("Elementary Cellular Automata"))
 			{
-				std::unique_ptr<Elementary> elementaryAutomata = std::make_unique<Elementary>();
+				static std::unique_ptr<Elementary> elementaryAutomata = std::make_unique<Elementary>();
 				auto& ElementaryCellularAutomataRuleset = elementaryAutomata->SetRuleset();
 
 				static int nCellsPerGeneration = elementaryAutomata->GetNumberOfCellsPerGeneration();

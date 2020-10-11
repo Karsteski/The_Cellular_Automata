@@ -1,6 +1,9 @@
 #include "Grid.h"
+
 #include <utility>
 #include <cmath>
+#include <memory>
+#include <future>
 
 Grid::Grid() : m_cells_to_draw(), m_enable_grid(true), m_canvas_size(100.0f, 100.0f), m_min_canvas_position(0.0f, 0.0f), m_max_canvas_position(100.0f, 100.0f), m_grid_scrolling(ImVec2(0.0f, 0.0f)),
 m_grid_steps(10),
