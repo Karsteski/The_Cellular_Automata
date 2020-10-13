@@ -50,8 +50,8 @@ int main(int, char**)
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
 
 	// Create window with graphics context
-	GLFWwindow* window = glfwCreateWindow(1280, 720, "The Cellular Automata", NULL, NULL);
-	if (window == NULL)
+	GLFWwindow* window = glfwCreateWindow(1280, 720, "The Cellular Automata", nullptr, nullptr);
+	if (window == nullptr)
 		return 1;
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1); // Enable vsync
@@ -116,15 +116,15 @@ int main(int, char**)
 
 				if (ImGui::BeginMenu("Menu"))
 				{
-					ImGui::MenuItem("Show ImGui Demo Window", NULL, &show_demo_window);
-					ImGui::MenuItem("Show Basic Drawing Grid", NULL, &show_basic_drawing_grid);
+					ImGui::MenuItem("Show ImGui Demo Window", nullptr, &show_demo_window);
+					ImGui::MenuItem("Show Basic Drawing Grid", nullptr, &show_basic_drawing_grid);
 					ImGui::EndMenu();
 				}
 
 				if (ImGui::BeginMenu("About"))
 				{
-					ImGui::MenuItem("Rules", NULL, &show_rules_window);
-					ImGui::MenuItem("About...", NULL, &show_about_window);	
+					ImGui::MenuItem("Rules", nullptr, &show_rules_window);
+					ImGui::MenuItem("About...", nullptr, &show_about_window);
 					ImGui::EndMenu();
 				}
 
