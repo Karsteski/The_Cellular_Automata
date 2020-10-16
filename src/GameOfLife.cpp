@@ -14,7 +14,7 @@ ImVec2 GameOfLife::GetGameDimensions()
 
 void GameOfLife::SetGameDimensions(ImVec2 dimensions)
 {
-	if (dimensions.x > 0 and dimensions.y > 0)
+	if (dimensions.x > 0 && dimensions.y > 0)
 	{
 		m_gridDimensions.x = std::trunc(dimensions.x);
 		m_gridDimensions.y = std::trunc(dimensions.y);
@@ -100,7 +100,7 @@ void GameOfLife::GeneratePattern(Pattern pattern)
 				if (m_cellMap.find(testCell) != m_cellMap.end())
 				{
 					// Sigh need to overload "==" for ImVec2... or switch to std::pair.
-					if (cell.x == testCell.x and cell.y == testCell.y)
+					if (cell.x == testCell.x && cell.y == testCell.y)
 						state = CellState::active;
 				}
 			}
@@ -227,7 +227,7 @@ void GameOfLife::SetAllCellStates()
 		{
 			if (numberOfActiveNeighbours < 2) // Cell dies by underpopulation.
 				state = CellState::inactive;
-			else if (numberOfActiveNeighbours == 2 or numberOfActiveNeighbours == 3) // Cell is happy and lives on :)
+			else if (numberOfActiveNeighbours == 2 || numberOfActiveNeighbours == 3) // Cell is happy and lives on :)
 				state = CellState::active;
 			else if (numberOfActiveNeighbours > 3) // Cell dies by overpopulation.
 				state = CellState::inactive;

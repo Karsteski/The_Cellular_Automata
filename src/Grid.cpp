@@ -111,7 +111,7 @@ void Grid::DrawCells()
 	for (auto cell : m_cells_to_draw)
 	{
 		// To remove negative numbers, which don't show up on the grid.
-		if (cell.x < 0 or cell.y < 0)
+		if (cell.x < 0 || cell.y < 0)
 		{
 			cell.x = std::abs(cell.x);
 			cell.y = std::abs(cell.y);
