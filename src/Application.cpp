@@ -81,6 +81,11 @@ int main(int, char**)
 	// Window state
 	const ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+	// Class Setup
+	Grid basicGrid;
+	GameOfLife ConwaysGameOfLife;
+	Elementary elementaryAutomata;
+
 	while (!glfwWindowShouldClose(window))
 	{
 		// Poll and handle events (inputs, window resize, etc.)
@@ -165,8 +170,7 @@ int main(int, char**)
 						"These states are based on the value of the cell itself, and the values of the cells to the left and right.\n"
 						"Since there are 2^3 = 8 possible binary states for the neighbour cells, there are a total of 2^8 = 256 elementary cellular automata, indexted by an 8-bit binary number.\n"
 						"One such example is the default example given in this program, known as rule 90: 01011010.\n"
-						"- Stephen Wolfram - Wolfram MathWorld (https://mathworld.wolfram.com/ElementaryCellularAutomaton.html)"
-						"";
+						"- Stephen Wolfram - Wolfram MathWorld (https://mathworld.wolfram.com/ElementaryCellularAutomaton.html)";
 					ImGui::Text(elementaryCellularAutomataRules.c_str());
 
 					ImGui::End();
@@ -195,16 +199,14 @@ int main(int, char**)
 			{
 				if (ImGui::Begin("Basic Grid", &show_basic_drawing_grid))
 				{
-					static std::unique_ptr<Grid> basicGrid = std::make_unique<Grid>();
-
 					static bool gridSwitch = true;
 					ImGui::Checkbox("Enable Grid", &gridSwitch);
-					basicGrid->EnableGrid(gridSwitch);
+					basicGrid.EnableGrid(gridSwitch);
 
 					static int gridSteps = 40;
 					ImGui::SetNextItemWidth(100);
 					ImGui::SliderInt("Grid Step Size", &gridSteps, 1, 100);
-					basicGrid->SetGridSteps(gridSteps);
+					basicGrid.SetGridSteps(gridSteps);
 
 					static int basic_rect_x = 0;
 					static int basic_rect_y = 0;
@@ -217,7 +219,7 @@ int main(int, char**)
 					ImGui::SetNextItemWidth(300);
 					static ImVec4 colour_picker = { 1.0f, 0.0f, 0.0f, 1.0f };
 					ImGui::ColorEdit4("Cell Colour", &colour_picker.x);
-					basicGrid->SetMainCellColour(static_cast<ImColor>(colour_picker));
+					basicGrid.SetMainCellColour(static_cast<ImColor>(colour_picker));
 
 					ImGui::Separator();
 
@@ -227,10 +229,10 @@ int main(int, char**)
 						if (basic_rect_x < 0) basic_rect_x = 0;
 						if (basic_rect_y < 0) basic_rect_y = 0;
 
-						basicGrid->DrawGrid();
+						basicGrid.DrawGrid();
 
-						basicGrid->m_cells_to_draw = { ImVec2(static_cast<float>(basic_rect_x), static_cast<float>(basic_rect_y)) };
-						basicGrid->DrawCells();
+						basicGrid.m_cells_to_draw = { ImVec2(static_cast<float>(basic_rect_x), static_cast<float>(basic_rect_y)) };
+						basicGrid.DrawCells();
 						ImGui::EndTabItem();
 						ImGui::EndTabBar();
 					}
@@ -241,13 +243,11 @@ int main(int, char**)
 			
 			if (ImGui::BeginTabItem("Game of Life"))
 			{
-				static std::unique_ptr<GameOfLife> ConwaysGameOfLife = std::make_unique<GameOfLife>();
-
 				static bool GoLgridSwitch = false;
 				ImGui::Checkbox("Enable Grid", &GoLgridSwitch);
-				ConwaysGameOfLife->EnableGrid(GoLgridSwitch);
+				ConwaysGameOfLife.EnableGrid(GoLgridSwitch);
 
-				auto [width, height] = ConwaysGameOfLife->GetGameDimensions();
+				auto [width, height] = ConwaysGameOfLife.GetGameDimensions();
 				static float gameWidth = width;
 				static float gameHeight = height;
 
@@ -259,7 +259,7 @@ int main(int, char**)
 				ImGui::SameLine(); ImGui::SetNextItemWidth(100);
 				ImGui::InputFloat("Game Height", &gameHeight, 1.0f, 10.0f, "%.0f");
 
-				ConwaysGameOfLife->SetGameDimensions(ImVec2(gameWidth, gameHeight));
+				ConwaysGameOfLife.SetGameDimensions(ImVec2(gameWidth, gameHeight));
 
 				static int radioButtonSwitch = 0;
 				ImGui::RadioButton("Conway's Game of Life", &radioButtonSwitch, 0); ImGui::SameLine();
@@ -273,22 +273,22 @@ int main(int, char**)
 					{
 					case 0:
 					{
-						ConwaysGameOfLife->GenerateRandomCells();
+						ConwaysGameOfLife.GenerateRandomCells();
 						break;
 					}
 					case 1:
 					{
-						ConwaysGameOfLife->GeneratePattern(Pattern::R_Pentomino);
+						ConwaysGameOfLife.GeneratePattern(Pattern::R_Pentomino);
 						break;
 					}
 					case 2:
 					{
-						ConwaysGameOfLife->GeneratePattern(Pattern::Glider_Gun);
+						ConwaysGameOfLife.GeneratePattern(Pattern::Glider_Gun);
 						break;
 					}
 					case 3:
 					{
-						ConwaysGameOfLife->GeneratePattern(Pattern::Infinite_Growth);
+						ConwaysGameOfLife.GeneratePattern(Pattern::Infinite_Growth);
 						break;
 					}
 					}
@@ -297,14 +297,14 @@ int main(int, char**)
 				static int gridSteps = 5;
 				ImGui::SetNextItemWidth(100);
 				ImGui::SliderInt("Zoom", &gridSteps, 1, 100);
-				ConwaysGameOfLife->SetGridSteps(gridSteps);
+				ConwaysGameOfLife.SetGridSteps(gridSteps);
 
 				if (time_functions)
 				{
 					// Timing to check the effectiveness of multithreading.
 					auto timerStart = std::chrono::high_resolution_clock::now();
 
-					ConwaysGameOfLife->GenerateGameOfLife();
+					ConwaysGameOfLife.GenerateGameOfLife();
 
 					auto timerStop = std::chrono::high_resolution_clock::now();
 					auto timerDuration = timerStop - timerStart;
@@ -312,7 +312,7 @@ int main(int, char**)
 				}
 				else
 				{
-					ConwaysGameOfLife->GenerateGameOfLife();
+					ConwaysGameOfLife.GenerateGameOfLife();
 				}
 				
 				ImGui::EndTabItem();
@@ -320,11 +320,10 @@ int main(int, char**)
 
 			if (ImGui::BeginTabItem("Elementary Cellular Automata"))
 			{
-				static std::unique_ptr<Elementary> elementaryAutomata = std::make_unique<Elementary>();
-				auto& ElementaryCellularAutomataRuleset = elementaryAutomata->SetRuleset();
+				auto& ElementaryCellularAutomataRuleset = elementaryAutomata.SetRuleset();
 
-				static int nCellsPerGeneration = elementaryAutomata->GetNumberOfCellsPerGeneration();
-				static int nGenerations = elementaryAutomata->GetNumberOfGenerations();
+				static int nCellsPerGeneration = elementaryAutomata.GetNumberOfCellsPerGeneration();
+				static int nGenerations = elementaryAutomata.GetNumberOfGenerations();
 
 				if (nCellsPerGeneration < 0) nCellsPerGeneration = 0;
 				if (nGenerations < 0) nGenerations = 0;
@@ -334,8 +333,8 @@ int main(int, char**)
 				ImGui::SameLine(); ImGui::SetNextItemWidth(100);
 				ImGui::InputInt("Number of Generations", &nGenerations);
 
-				elementaryAutomata->SetNumberOfCellsPerGeneration(nCellsPerGeneration);
-				elementaryAutomata->SetNumberOfGenerations(nGenerations);
+				elementaryAutomata.SetNumberOfCellsPerGeneration(nCellsPerGeneration);
+				elementaryAutomata.SetNumberOfGenerations(nGenerations);
 
 				// Can't pass individual bits by reference, therefore the following repeated code is a necessary evil,
 				// unless a workaround is implemented to make a vector<bool> act like a regular STL container.
@@ -378,11 +377,11 @@ int main(int, char**)
 
 				if (ImGui::Button("Generate"))
 				{
-					elementaryAutomata->GenerateElementaryAutomata();
+					elementaryAutomata.GenerateElementaryAutomata();
 				}
 
-				elementaryAutomata->DrawGrid();
-				elementaryAutomata->DrawCells();
+				elementaryAutomata.DrawGrid();
+				elementaryAutomata.DrawCells();
 
 				ImGui::EndTabItem();
 			}

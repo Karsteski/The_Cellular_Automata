@@ -22,8 +22,9 @@ const CellState Elementary::GetCellState(ImVec2 cell) const
 	if (m_cellMap.find(cell) != m_cellMap.end())
 	{
 		auto state = m_cellMap.at(cell);
-		return state;
+	return state;
 	}
+	
 	else
 	{
 		return CellState::inactive;
@@ -166,6 +167,7 @@ void Elementary::SetAllCellStates()
 				state = static_cast<CellState>(m_ruleset.test(7));
 				break;
 			}
+			
 			}
 		}
 	}

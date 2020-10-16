@@ -37,7 +37,6 @@ target_include_directories(
 # GLFW: Static linkage, no dependecies. Note the use of a .lib in this situation.
 target_link_libraries(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/src/imgui/lib-vc2019/glfw3.lib)
 
-
 # GL3W: Static linkage, no dependencies.
 add_library(gl3w STATIC)
 target_include_directories(gl3w PUBLIC "src/imgui/")
@@ -83,7 +82,7 @@ target_include_directories(
     "src/imgui/lib-vc2019"
     "src/imgui/misc/cpp")
 
-# Necessary for the tests.exe to properly compile.
+# Necessary linkages for the tests.exe to properly compile.
 target_link_libraries(tests gl3w)
 target_link_libraries(tests OpenGL::GL gl3w)
 target_link_libraries(tests imgui)

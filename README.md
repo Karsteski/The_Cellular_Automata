@@ -26,9 +26,9 @@ Inspired by Stephen Wolfram's 2002 book: [A New Kind of Science](https://www.wol
 - This is my first attempt at a non-trivial project with zero influence from a tutorial. Please enjoy :)
 #### Possible improvements in the future:
 
-- Allow project to be built using Premake/CMake.
+- ~~Allow project to be built using Premake/CMake.~~
+- Add unit tests.
 - Make project cross-platform.
 - The Elementary Cellular Automata and Game of Life both use unordered maps (asssociative arrays) to store and search the cells.
 Each update/access is O(log(n)), whereas if I had used an array/vector their update/access would be O(1), which would greatly improve performance. 
-An ordered map (hash table) is also a viable alternative.
 - Similarly, performance can be greatly improved by adding multithreaded support. 
