@@ -1,7 +1,7 @@
 project('Cellular-Automata-Generator', 'cpp', default_options : 'cpp_std=c++17')
 
 # Internal libraries
-subdir('src/imgui')
+subdir('libs/imgui')
 
 src_files = [
     'src/Application.cpp',
@@ -12,8 +12,8 @@ src_files = [
 
 include_dirs = [
     'src',
-    'src/imgui',
-    'src/imgui/backends'
+    'libs/imgui',
+    'libs/imgui/backends'
 ]
 
 lib_names = [
