@@ -4,16 +4,17 @@ project('Cellular-Automata-Generator', 'cpp', default_options : 'cpp_std=c++17')
 subdir('libs/imgui')
 
 src_files = [
-    'src/Application.cpp',
-    'src/Elementary.cpp',
-    'src/GameOfLife.cpp',
-    'src/Grid.cpp'
+    './src/Application.cpp',
+    './src/Elementary.cpp',
+    './src/GameOfLife.cpp',
+    './src/Grid.cpp',
+    './src/Main.cpp'
 ]
 
 include_dirs = [
-    'src',
-    'libs/imgui',
-    'libs/imgui/backends'
+    './includes',
+    './libs/imgui',
+    './libs/imgui/backends'
 ]
 
 lib_names = [
@@ -34,9 +35,10 @@ foreach lib : lib_names
     deps += temp
 endforeach
 
-executable('Cellular-Automata-Generator',
+executable(
+    'cellular-automata-generator',
     sources : src_files,
     dependencies : deps,
     include_directories : include_dirs,
-    link_with : [imgui_lib]
+    link_with : imgui_lib
 )
