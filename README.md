@@ -3,7 +3,9 @@
 This is a generator for Elementary Cellular Automata and John Conway's Game of Life.
 Inspired by Stephen Wolfram's 2002 book: [A New Kind of Science](https://www.wolframscience.com/nks/).
 
-![Demo Video](https://imgur.com/3ajk31W)
+![Demo Image](resources/demo_image.png)
+
+[*Demo Video*](https://imgur.com/3ajk31W)
 
 ## John Conway's Game of Life
 
