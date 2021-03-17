@@ -3,6 +3,7 @@
 This is a generator for Elementary Cellular Automata and John Conway's Game of Life.
 Inspired by Stephen Wolfram's 2002 book: [A New Kind of Science](https://www.wolframscience.com/nks/).
 
+[Demonstration Video](https://imgur.com/SaEHfmm)
 ## John Conway's Game of Life
 
 - The universe of the Game of Life is an infinite, two-dimensional orthogonal grid of square cells, each of which is in one of two possible states, alive or dead.
