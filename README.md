@@ -25,15 +25,31 @@ Inspired by Stephen Wolfram's 2002 book: [A New Kind of Science](https://www.wol
 - In this program, different automata can be generated simply by changing an 8-bit binary number that represents the rules for what each cell's state should be given it's neighbours.
 - More details at [Wolfram Mathworld](https://mathworld.wolfram.com/ElementaryCellularAutomaton.html).
 
-### About the Project
+## **About the Project**
 
 - This is my first attempt at a non-trivial project with zero influence from a tutorial. Please enjoy :)
-  
-#### Possible improvements in the future
 
-- ~~Allow project to be built using Premake/CMake.~~
-- Add unit tests.
-- Make project cross-platform.
-- The Elementary Cellular Automata and Game of Life both use unordered maps (asssociative arrays) to store and search the cells.
-Each update/access is O(log(n)), whereas if I had used an array/vector their update/access would be O(1), which would greatly improve performance. 
-- Similarly, performance can be greatly improved by adding multithreaded support. 
+### ***Project Setup***
+
+User must have [the Meson build system](https://mesonbuild.com/) installed before the project can be built. Note that these instructions are specifically for Linux, but the project can be just as easily built on Windows.
+
+I installed my dependencies using [Vcpkg](https://github.com/Microsoft/vcpkg), but feel free to use whatever works for you.
+
+Dependencies:
+
+- [GLFW3](https://www.glfw.org/)
+- [GLEW](https://github.com/nigels-com/glew)
+- [OpenGL](https://www.opengl.org/)
+
+      # Navigate to the desired directory, then run the following commands:
+
+      git clone https://github.com/Karsteski/The_Cellular_Automata.git
+      cd builddir
+      meson compile
+      ./cellular-automata-generator
+
+### Things I would have done differently
+
+- Use `std::vector` instead of `std::map`. This would result in significantly faster iteration (O(n) instead of O(log(n)).
+- Write unit tests while writing the program. At the time I was in a hurry to get something working, and therefore I thought unit testing would have slowed me down. BIG MISTAKE. It would have certainly helped fix bugs far faster.
+- Stick to STL containers. `ImVec2` was used to store point information but ultimately it would have been simpler to stick to `std::pair` or `std::tuple`.
