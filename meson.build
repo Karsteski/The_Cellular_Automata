@@ -4,7 +4,6 @@ project('Cellular-Automata-Generator', 'cpp', default_options : 'cpp_std=c++17')
 subdir('libs/imgui')
 
 src_files = [
-    './src/Application.cpp',
     './src/Elementary.cpp',
     './src/GameOfLife.cpp',
     './src/Grid.cpp',
