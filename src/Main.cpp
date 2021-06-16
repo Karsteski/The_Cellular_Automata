@@ -214,7 +214,12 @@ int main(int, char**)
                     static int gridSteps = 40;
                     ImGui::SetNextItemWidth(100);
                     ImGui::SliderInt("Grid Step Size", &gridSteps, 1, 100);
-                  we are supporting   ImGui::SetNextItemWidth(100);
+                    basicGrid.SetGridSteps(gridSteps);
+
+                    static int basic_rect_x = 0;
+                    static int basic_rect_y = 0;
+
+                    ImGui::SetNextItemWidth(100);
                     ImGui::InputInt("x-coordinate", &basic_rect_x);
                     ImGui::SameLine();
                     ImGui::SetNextItemWidth(100);
