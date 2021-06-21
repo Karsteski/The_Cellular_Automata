@@ -5,7 +5,7 @@ Inspired by Stephen Wolfram's 2002 book: [A New Kind of Science](https://www.wol
 
 ![Demo Image](resources/demo_image.png)
 
-[*Demo Video*](https://imgur.com/3ajk31W)
+![Demo Video](resources/demo.gif)
 
 ## John Conway's Game of Life
 
@@ -33,24 +33,26 @@ Inspired by Stephen Wolfram's 2002 book: [A New Kind of Science](https://www.wol
 
 - This is my first attempt at a non-trivial project with zero influence from a tutorial. Please enjoy :)
 
-### ***Project Setup***
+## ***Project Setup***
 
-User must have [the Meson build system](https://mesonbuild.com/) installed before the project can be built. Note that these instructions are specifically for Linux, but the project can be just as easily built on Windows.
-
-I installed my dependencies using [Vcpkg](https://github.com/Microsoft/vcpkg), but feel free to use whatever works for you.
+User must have [the Meson build system](https://mesonbuild.com/) installed before the project can be built. Project is self-contained and easily builds on Linux, but GLEW must be installed linked separately on Windows due to an [issue with how Meson invokes the Microsoft Resource Compiler](https://github.com/ocornut/imgui) for the GLEW library. This can be done using [vcpkg](https://vcpkg.io/en/index.html) or your package manager of choice.
 
 Dependencies:
 
 - [GLFW3](https://www.glfw.org/)
 - [GLEW](https://github.com/nigels-com/glew)
 - [OpenGL](https://www.opengl.org/)
+- [DearImGui](https://github.com/ocornut/imgui)
 
-      # Navigate to the desired directory, then run the following commands:
-
-      git clone https://github.com/Karsteski/The_Cellular_Automata.git
-      cd builddir
-      meson compile
-      ./cellular-automata-generator
+```bash
+# Navigate to the desired directory, then run the following command
+$ git clone --recursive https://github.com/Karsteski/The_Cellular_Automata.git
+$ cd builddir
+$ meson configure -Dcpp_std=c++17
+$ meson configure -Dbuildtype=release
+$ meson compile
+$ ./cellular-automata-generator
+```
 
 ### Things I would have done differently
 

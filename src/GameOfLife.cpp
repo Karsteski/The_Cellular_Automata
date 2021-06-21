@@ -7,7 +7,7 @@
 
 GameOfLife::GameOfLife()
     : m_cellMap()
-    , m_gridDimensions(150.0f, 150.0f) {};
+    , m_gridDimensions(150.0f, 150.0f) {}
 
 ImVec2 GameOfLife::GetGameDimensions()
 {
@@ -152,7 +152,6 @@ CellState GameOfLife::GetCellState(ImVec2 cell)
         return CellState::inactive;
     }
 }
-
 void GameOfLife::SetAllCellStates()
 {
     // Buffer as I can't read and write to the cellMap at the same time, as the cells written to affect the next cells.
@@ -229,7 +228,6 @@ void GameOfLife::SetAllCellStates()
 
 void GameOfLife::DrawCells()
 {
-    ImGuiIO& io = ImGui::GetIO();
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
     const ImVec2 origin = ImVec2(m_min_canvas_position.x + m_grid_scrolling.x, m_min_canvas_position.y + m_grid_scrolling.y);

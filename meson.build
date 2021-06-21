@@ -1,7 +1,27 @@
-project('Cellular-Automata-Generator', 'cpp', default_options : 'cpp_std=c++17')
+project('Cellular-Automata-Generator', 'cpp', version : '1.0')
 
-# Internal libraries
-subdir('libs/imgui')
+# Print relevant options.
+message('C++ Version = ' + get_option('cpp_std'))
+message('Warning level = ' + get_option('warning_level'))
+message('Build type = ' + get_option('buildtype'))
+
+# GLFW dependency using CMake
+cmake = import('cmake')
+## Set CMake options for building GLFW
+glfw_opt_var = cmake.subproject_options()
+glfw_opt_var.add_cmake_defines({'BUILD_SHARED_LIBS': true})
+glfw_opt_var.add_cmake_defines({'GLFW_BUILD_EXAMPLES': false})
+glfw_opt_var.add_cmake_defines({'GLFW_BUILD_TESTS': false})
+glfw_opt_var.add_cmake_defines({'GLFW_BUILD_DOCS': false})
+# Configure the CMake project
+glfw_sub_proj = cmake.subproject('glfw', options: glfw_opt_var)
+# Fetch dependency object
+glfw_dep = glfw_sub_proj.dependency('glfw')
+
+# Dependencies
+glew_dep = dependency('glew', fallback : ['glew', 'glew_dep'])
+imgui_dep = dependency('imgui', fallback: ['imgui', 'imgui_dep'])
+opengl_dep = dependency('opengl')
 
 src_files = [
     './src/Elementary.cpp',
@@ -12,32 +32,18 @@ src_files = [
 
 include_dirs = [
     './includes',
-    './libs/imgui',
-    './libs/imgui/backends'
 ]
 
-lib_names = [
-    'glfw3',
-    'glew',
-    'opengl'
+deps = [
+    glfw_dep,
+    glew_dep,
+    imgui_dep,
+    opengl_dep
 ]
-
-deps = []
-
-
-foreach lib : lib_names
-    temp = dependency(lib, required : false)
-    if not temp.found()
-        temp = cpp_compiler.find_library(lib)
-    endif
-
-    deps += temp
-endforeach
 
 executable(
     'cellular-automata-generator',
     sources : src_files,
     dependencies : deps,
     include_directories : include_dirs,
-    link_with : imgui_lib
 )

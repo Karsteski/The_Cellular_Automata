@@ -5,23 +5,23 @@ Elementary::Elementary()
     : m_cellMap()
     , m_ruleset("01011010")
     , m_numberOfCellsPerGeneration(200)
-    , m_numberOfGenerations(500) {};
+    , m_numberOfGenerations(500) {}
 
 const std::map<ImVec2, CellState>& Elementary::GetCellMap() const
 {
     return m_cellMap;
 }
 
-const int Elementary::GetNumberOfCellsPerGeneration() const
+int Elementary::GetNumberOfCellsPerGeneration() const
 {
     return m_numberOfCellsPerGeneration;
 }
-const int Elementary::GetNumberOfGenerations() const
+int Elementary::GetNumberOfGenerations() const
 {
     return m_numberOfGenerations;
 }
 
-const CellState Elementary::GetCellState(ImVec2 cell) const
+CellState Elementary::GetCellState(ImVec2 cell) const
 {
     if (m_cellMap.find(cell) != m_cellMap.end()) {
         auto state = m_cellMap.at(cell);
@@ -162,7 +162,6 @@ void Elementary::SetAllCellStates()
 
 void Elementary::DrawCells()
 {
-    ImGuiIO& io = ImGui::GetIO();
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
     draw_list->PushClipRect(m_min_canvas_position, m_max_canvas_position, true);
@@ -184,7 +183,7 @@ void Elementary::DrawCells()
 void Elementary::GenerateElementaryAutomata()
 {
     GenerateCells();
-    const float startPoint = static_cast<float>(m_numberOfCellsPerGeneration / 2);
+    const float startPoint = static_cast<float>(m_numberOfCellsPerGeneration) / 2.0f;
     SetSingleCellState(ImVec2(startPoint, 0), CellState::active);
     SetAllCellStates();
 }
