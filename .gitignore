@@ -1,4 +1,15 @@
 # Folders
 .vscode/
-build/
+builddir/
+
+# Exclude Meson Wrap DB subproject files that will be downloaded upon project setup.
+/subprojects/*
+
+# Keep the Wrap DB definitions. 
+!/subprojects/glew.wrap
+!/subprojects/glm.wrap
+!/subprojects/imgui.wrap
+
+# Keep the GLFW source directory.
+!/subprojects/glfw
 
